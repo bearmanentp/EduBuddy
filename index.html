@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>EduBuddy - AI 융합 교육 추천 및 세특 빌더</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px rgba(255, 255, 255, 0.07) solid;
+            border-radius: 20px;
+        }
+        .glow-action-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
+            background-size: 200% auto;
+            transition: all 0.4s ease;
+        }
+        .glow-action-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <header class="glass-panel px-6 py-4 flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">✨</span>
+                    <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">EduBuddy</h1>
+                    <span class="text-[10px] font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 px-2 py-0.5 rounded-full">v2.0 EXTERNAL</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">국가평생교육진흥원 학점은행제 XML & K-MOOC JSON OpenAPI 실시간 연동</p>
+            </div>
+            <div class="flex items-center gap-3 text-right">
+                <div class="border-r border-slate-700/60 pr-3">
+                    <span class="text-[10px] block text-slate-500 uppercase font-bold tracking-widest">ENGINE</span>
+                    <span class="text-xs font-semibold text-cyan-400">Groq Llama 3.3</span>
+                </div>
+                <div>
+                    <span class="text-[10px] block text-slate-500 uppercase font-bold tracking-widest">DEVELOPER</span>
+                    <span class="text-sm font-bold text-slate-300">Geek Byte (석근우)</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="space-y-6">
+            <div class="glass-panel p-6 shadow-2xl">
+                <label for="userInput" class="block text-sm font-bold text-slate-300 mb-2 flex items-center gap-1.5">
+                    <span>✍️</span> 고등학교 교과 과정에서 배운 내용이나 확장하고 싶은 진로 심화 주제를 적어주세요
+                </label>
+                <textarea id="userInput" rows="4" 
+                    class="w-full bg-slate-950/60 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-slate-600 transition-all"
+                    placeholder="예시) 정보 교과 시간에 자료구조와 파이썬 알고리즘을 배웠어. 이를 웹 OS 시뮬레이터 프로젝트 대시보드 설계와 연계해서 깊게 확장하고 싶어."></textarea>
+                
+                <button onclick="generateDashboard()" class="glow-action-btn w-full mt-4 text-sm font-black text-white py-3.5 px-4 rounded-xl cursor-pointer tracking-wider">
+                    오픈 API 통합 데이터 로드 및 AI 맞춤 분석 시작
+                </button>
+            </div>
+
+            <div id="loading" class="hidden glass-panel p-12 text-center space-y-4">
+                <div class="relative w-12 h-12 mx-auto">
+                    <div class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-25"></div>
+                    <div class="relative rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400 animate-spin"></div>
+                </div>
+                <p class="text-sm font-bold text-slate-300">OpenAPI 데이터 수집 및 외부 배포 서버 연산 중...</p>
+            </div>
+
+            <div id="errorPanel" class="hidden glass-panel p-8 text-center border-l-4 border-rose-500 bg-rose-950/10">
+                <span class="text-3xl">⚠️</span>
+                <h3 class="text-lg font-black text-rose-400 mt-2">현재 서비스가 원활하지 않습니다.</h3>
+                <p id="errorMsg" class="text-xs text-slate-400 mt-2 leading-relaxed">잠시 후 다시 시도해 주세요.</p>
+            </div>
+
+            <div id="dashboard" class="hidden space-y-6">
+                <div>
+                    <h3 class="text-lg font-black text-slate-200 mb-3 flex items-center gap-2">
+                        <span class="text-cyan-400">■</span> API 연계 맞춤형 교육 커리큘럼
+                    </h3>
+                    <div id="courseGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                </div>
+
+                <div class="glass-panel p-6 border-l-4 border-purple-500 shadow-xl bg-gradient-to-r from-purple-950/10 to-transparent">
+                    <h3 class="text-lg font-black text-purple-300 mb-4 flex items-center gap-2">
+                        <span>📋</span> 학생부 종합전형 대비 교과 세특 심화 탐구 설계서
+                    </h3>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 block">추천 탐구 프로젝트 명칭</span>
+                            <p id="actTitle" class="text-base font-bold text-slate-100 mt-1 bg-slate-900/40 px-3 py-2 rounded-lg border border-slate-800/50"></p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 block">자기주도적 탐구 동기 설계</span>
+                            <p id="actMotiv" class="text-slate-300 mt-1.5 leading-relaxed text-justify"></p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 block">핵심 학술 탐구 및 실험 가이드</span>
+                            <p id="actContext" class="text-slate-300 mt-1.5 leading-relaxed text-justify"></p>
+                        </div>
+                        <div class="mt-6 bg-cyan-950/20 border border-cyan-800/40 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-cyan-400 block mb-2">💡 학교생활기록부 입력 컴팩트 예시문</span>
+                            <blockquote id="sefitFinal" class="text-slate-200 italic font-semibold leading-relaxed tracking-wide bg-slate-950/40 p-3 rounded-lg border border-slate-900"></blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 💡 [여기가 네가 찾던 칸!] 여기에 배포한 구글 앱스크립트 웹앱 URL 주소를 통째로 넣어줘!
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxBK2o6gMi5NMKzJiBNL_SkdCNgtjEJd5gJIwQ_GjpwLMzZpC1AWovhxCx7C_4Ox7-Q/exec";
+
+        function generateDashboard() {
+            const userInput = document.getElementById('userInput').value.trim();
+            if(!userInput) {
+                alert('탐구하고자 하는 교과 세부 내용이나 키워드를 입력해 주세요.');
+                return;
+            }
+
+            if(WEB_APP_URL === "구글_앱스크립트_웹앱_URL_넣는_칸" || !WEB_APP_URL.startsWith("https")) {
+                alert("HTML 코드 상단의 WEB_APP_URL 변수에 실제 앱스크립트 웹앱 주소를 입력해 주셔야 연동됩니다!");
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const dashboard = document.getElementById('dashboard');
+            const errorPanel = document.getElementById('errorPanel');
+            
+            loading.classList.remove('hidden');
+            dashboard.classList.add('hidden');
+            errorPanel.classList.add('hidden');
+
+            // 외부 통신용 표준 표준 fetch API 비동기 엔드포인트 바인딩
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                contentType: "text/plain", // GAS doPost 규격 스펙 맞춤용
+                body: JSON.stringify({
+                    action: 'searchAndRecommend',
+                    userInput: userInput
+                })
+            })
+            .then(res => res.json())
+            .then(responseObj => {
+                loading.classList.add('hidden');
+                if(responseObj.success) {
+                    displayData(responseObj.data);
+                } else {
+                    document.getElementById('errorMsg').innerText = responseObj.error;
+                    errorPanel.classList.remove('hidden');
+                }
+            })
+            .catch(err => {
+                loading.classList.add('hidden');
+                document.getElementById('errorMsg').innerText = "앱스크립트 엔드포인트 통신 실패 (CORS 또는 URL 설정을 확인하세요)";
+                errorPanel.classList.remove('hidden');
+                console.error(err);
+            });
+        }
+
+        function displayData(aiData) {
+            const dashboard = document.getElementById('dashboard');
+            const courseGrid = document.getElementById('courseGrid');
+            courseGrid.innerHTML = '';
+            
+            aiData.recommended_courses.forEach(course => {
+                const isKmooc = course.source.toUpperCase().includes('K-MOOC');
+                const badgeStyle = isKmooc ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30';
+                
+                const cardHtml = `
+                    <div class="glass-panel p-5 flex flex-col justify-between hover:border-slate-700/80 transition-all hover:-translate-y-1 duration-300 bg-gradient-to-b from-slate-900/20 to-transparent">
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black px-2 py-0.5 rounded border ${badgeStyle}">${course.source}</span>
+                                <span class="text-[11px] text-slate-500 font-medium">${course.institution}</span>
+                            </div>
+                            <h4 class="text-base font-bold text-slate-100 mt-3 tracking-tight">${course.title}</h4>
+                            <p class="text-xs text-slate-400 mt-2 leading-relaxed text-justify">${course.desc}</p>
+                        </div>
+                    </div>
+                `;
+                courseGrid.innerHTML += cardHtml;
+            });
+
+            document.getElementById('actTitle').innerText = aiData.sefit_plan.activity_title;
+            document.getElementById('actMotiv').innerText = aiData.sefit_plan.motivation;
+            document.getElementById('actContext').innerText = aiData.sefit_plan.content;
+            document.getElementById('sefitFinal').innerText = `"${aiData.sefit_plan.draft}"`;
+
+            dashboard.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
