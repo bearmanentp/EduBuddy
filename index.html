@@ -7,17 +7,17 @@
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:Segoe UI, Malgun Gothic, sans-serif;background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);min-height:100vh;padding:15px;}
+    body{font-family:Segoe UI,Malgun Gothic,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
     .container{max-width:980px;margin:0 auto;}
     header{text-align:center;color:#fff;margin-bottom:14px;}
     h1{font-size:2.1rem;margin-bottom:4px;}
     .subtitle{opacity:.9;font-size:1rem;}
     .quick-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
-    .quick-btn{padding:7px 14px;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
-    .quick-btn:hover{background:rgba(255,255,255,0.35);transform:translateY(-2px);}
-    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.2);overflow:hidden;display:flex;flex-direction:column;height:640px;}
+    .quick-btn{padding:7px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
+    .quick-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-2px);}
+    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:640px;}
     .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
-    .clear-btn{background:rgba(255,255,255,0.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:12px;}
+    .clear-btn{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:12px;}
     .messages{flex:1;padding:15px;overflow-y:auto;background:#f5f7fa;}
     .msg{margin-bottom:12px;display:flex;animation:fadeIn .25s ease;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
@@ -25,19 +25,19 @@
     .msg.ai{justify-content:flex-start;}
     .bubble{max-width:85%;padding:12px 16px;border-radius:16px;line-height:1.6;word-break:break-word;font-size:14px;}
     .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:4px;}
-    .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,0.08);border-bottom-left-radius:4px;}
-    .bubble h2,.bubble h3{color:#667eea;margin:10px 0 6px;font-size:0.98rem;}
+    .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,.08);border-bottom-left-radius:4px;}
+    .bubble h2,.bubble h3{color:#667eea;margin:10px 0 6px;font-size:.98rem;}
     .bubble strong{color:#764ba2;}
     .bubble a{color:#5568d3;text-decoration:none;}
     .bubble a:hover{text-decoration:underline;}
     .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:4px solid #667eea;padding:10px 12px;margin:7px 0;border-radius:8px;}
-    .course-card h4{color:#667eea;font-size:0.92rem;margin-bottom:3px;}
-    .course-card .meta{color:#555;font-size:0.82rem;margin:2px 0;}
-    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff !important;padding:6px 10px;border-radius:6px;text-decoration:none !important;font-size:0.85rem;font-weight:bold;}
+    .course-card h4{color:#667eea;font-size:.92rem;margin-bottom:3px;}
+    .course-card .meta{color:#555;font-size:.82rem;margin:2px 0;}
+    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff!important;padding:6px 10px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;}
     .credit-card{background:#f0fff4;border-left:4px solid #34a853;padding:10px 12px;margin:7px 0;border-radius:8px;}
-    .credit-card h4{color:#34a853;font-size:0.92rem;margin-bottom:3px;}
-    .credit-card .meta{color:#555;font-size:0.82rem;margin:2px 0;}
-    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff !important;padding:6px 10px;border-radius:6px;text-decoration:none !important;font-size:0.85rem;font-weight:bold;}
+    .credit-card h4{color:#34a853;font-size:.92rem;margin-bottom:3px;}
+    .credit-card .meta{color:#555;font-size:.82rem;margin:2px 0;}
+    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff!important;padding:6px 10px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;}
     .no-data{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;}
     .error-box{background:#f8d7da;border-left:4px solid #dc3545;padding:10px 12px;margin:8px 0;border-radius:8px;color:#721c24;}
     .image-box{margin:10px 0;border-radius:12px;overflow:hidden;border:1px solid #eaeaea;background:#fff;}
@@ -55,12 +55,13 @@
     #msgInput:focus{border-color:#667eea;}
     #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;}
     #sendBtn:disabled{background:#ccc;cursor:wait;}
-    .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
+    .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
     .typing span{width:7px;height:7px;background:#667eea;border-radius:50%;animation:bounce 1.2s infinite;}
     .typing span:nth-child(2){animation-delay:.2s;}
     .typing span:nth-child(3){animation-delay:.4s;}
     @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
-    @media (max-width: 600px){.chat-box{height:560px;} .bubble{max-width:92%;font-size:13px;}}
+    @media(max-width:600px){.chat-box{height:560px;}.bubble{max-width:92%;font-size:13px;}}
+    .debug-box{background:#e8f4fd;border-left:4px solid #2196f3;padding:8px 12px;margin:8px 0;border-radius:8px;color:#0d47a1;font-size:12px;word-break:break-all;}
   </style>
 </head>
 
@@ -90,23 +91,19 @@
         <div class="msg ai">
           <div class="bubble">
             안녕하세요! 👋
-            <br/>📝 세특 추천
-            <br/>📚 강의 추천 + 링크
-            <br/>🎓 학점은행제 추천
-            <br/>📎 TXT/HWP 첨부 가능
-            <br/>🖼️ 이미지 생성 프롬프트는 ON일 때 제공
+            <br/>📝 세특 추천 · 📚 강의 추천 + 링크
+            <br/>🎓 학점은행제 추천 · 📎 TXT 첨부 가능
           </div>
         </div>
       </div>
 
       <div class="input-area">
         <div class="top-row">
-          <label class="file-label" for="fileInput">📎 파일 첨부(TXT/HWP)</label>
-          <input type="file" id="fileInput" accept=".txt,.hwp,.hwp5,.doc,.docx" />
+          <label class="file-label" for="fileInput">📎 파일 첨부(TXT)</label>
+          <input type="file" id="fileInput" accept=".txt" />
           <div id="fileName">선택된 파일 없음</div>
-          <button id="imgToggle" onclick="toggleImg()">🖼️ 이미지 생성 프롬프트: OFF</button>
+          <button id="imgToggle" onclick="toggleImg()">🖼️ 이미지 프롬프트: OFF</button>
         </div>
-
         <div class="bottom-row">
           <input id="msgInput" type="text" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()" />
           <button id="sendBtn" onclick="sendMsg()">전송</button>
@@ -116,7 +113,7 @@
   </div>
 
   <script>
-    // ✅ 반드시 본인 Apps Script 웹앱 URL로 교체하세요!
+    // ✅ 본인 Apps Script 웹앱 URL로 교체
     var API_URL = "https://script.google.com/macros/s/AKfycbxqGXIqqZDdvhMqekjlXouEQOexiUZGMidxSMGPzVd-Yc_fNEw7HNxzJVtWEb_2-h73/exec";
 
     var sid = localStorage.getItem("edubuddy_sid");
@@ -125,52 +122,142 @@
       localStorage.setItem("edubuddy_sid", sid);
     }
 
-    const msgBox = document.getElementById("messages");
-    const msgInput = document.getElementById("msgInput");
-    const sendBtn = document.getElementById("sendBtn");
-    const fileInput = document.getElementById("fileInput");
-    const fileNameEl = document.getElementById("fileName");
-    const imgToggleBtn = document.getElementById("imgToggle");
+    var msgBox = document.getElementById("messages");
+    var msgInput = document.getElementById("msgInput");
+    var sendBtn = document.getElementById("sendBtn");
+    var fileInput = document.getElementById("fileInput");
+    var fileNameEl = document.getElementById("fileName");
+    var imgToggleBtn = document.getElementById("imgToggle");
 
-    let needImage = false;
-    let currentFileText = "";
-    let currentFileName = "";
+    var needImage = false;
+    var currentFileText = "";
+    var currentFileName = "";
 
-    function jsonpRequest(params, timeoutMs) {
-      timeoutMs = timeoutMs || 90000;
+    // =============================================
+    // 핵심: 3단계 폴백 요청 함수
+    // 1) fetch  2) XHR  3) JSONP
+    // =============================================
+    function apiRequest(params, timeoutMs) {
+      timeoutMs = timeoutMs || 120000;
+
+      var query = Object.keys(params).map(function(k) {
+        return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
+      }).join("&");
+
+      var url = API_URL + "?" + query;
+
+      console.log("[EduBuddy] 요청 URL 길이:", url.length);
+
+      // ---- 방법 1: fetch ----
+      return tryFetch(url, timeoutMs)
+        .catch(function(fetchErr) {
+          console.warn("[EduBuddy] fetch 실패:", fetchErr.message, "→ XHR 시도");
+          // ---- 방법 2: XHR ----
+          return tryXHR(url, timeoutMs);
+        })
+        .catch(function(xhrErr) {
+          console.warn("[EduBuddy] XHR 실패:", xhrErr.message, "→ JSONP 시도");
+          // ---- 방법 3: JSONP ----
+          return tryJSONP(params, timeoutMs);
+        });
+    }
+
+    function tryFetch(url, timeoutMs) {
       return new Promise(function(resolve, reject) {
-        var callbackName = "__edubuddy_cb_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-        params.callback = callbackName;
+        var controller = null;
+        var timer = null;
 
-        var query = Object.keys(params).map(function(key) {
-          return encodeURIComponent(key) + "=" + encodeURIComponent(params[key] == null ? "" : params[key]);
+        if (typeof AbortController !== "undefined") {
+          controller = new AbortController();
+        }
+
+        timer = setTimeout(function() {
+          if (controller) controller.abort();
+          reject(new Error("fetch timeout"));
+        }, timeoutMs);
+
+        fetch(url, {
+          method: "GET",
+          redirect: "follow",
+          signal: controller ? controller.signal : undefined
+        })
+          .then(function(resp) {
+            clearTimeout(timer);
+            if (!resp.ok) throw new Error("HTTP " + resp.status);
+            return resp.text();
+          })
+          .then(function(text) {
+            console.log("[EduBuddy] fetch 성공, 응답 길이:", text.length);
+            try {
+              resolve(JSON.parse(text));
+            } catch (e) {
+              reject(new Error("JSON parse 실패: " + text.substring(0, 200)));
+            }
+          })
+          .catch(function(err) {
+            clearTimeout(timer);
+            reject(err);
+          });
+      });
+    }
+
+    function tryXHR(url, timeoutMs) {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.timeout = timeoutMs;
+
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            console.log("[EduBuddy] XHR 성공");
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch (e) {
+              reject(new Error("XHR JSON parse 실패"));
+            }
+          } else {
+            reject(new Error("XHR HTTP " + xhr.status));
+          }
+        };
+
+        xhr.onerror = function() { reject(new Error("XHR network error")); };
+        xhr.ontimeout = function() { reject(new Error("XHR timeout")); };
+        xhr.send();
+      });
+    }
+
+    function tryJSONP(params, timeoutMs) {
+      return new Promise(function(resolve, reject) {
+        var cbName = "__edubuddy_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+        params.callback = cbName;
+
+        var query = Object.keys(params).map(function(k) {
+          return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
         }).join("&");
 
         var script = document.createElement("script");
         var timer = null;
 
         function cleanup() {
-          if (timer) clearTimeout(timer);
-          try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
-          if (script && script.parentNode) script.parentNode.removeChild(script);
+          clearTimeout(timer);
+          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
         }
 
-        window[callbackName] = function(data) {
+        window[cbName] = function(data) {
           cleanup();
+          console.log("[EduBuddy] JSONP 성공");
           resolve(data);
         };
 
         script.onerror = function() {
           cleanup();
-          reject(new Error(
-            "Apps Script 웹앱에 접근할 수 없습니다. " +
-            "배포 설정에서 '액세스: 누구나'로 되어 있는지 확인하세요."
-          ));
+          reject(new Error("JSONP도 실패. URL을 브라우저에서 직접 열어보세요: " + API_URL + "?type=ping"));
         };
 
         timer = setTimeout(function() {
           cleanup();
-          reject(new Error("요청 시간이 초과되었습니다."));
+          reject(new Error("JSONP timeout"));
         }, timeoutMs);
 
         script.src = API_URL + "?" + query;
@@ -178,29 +265,29 @@
       });
     }
 
-    fileInput.addEventListener("change", async function(ev) {
-      const f = ev.target.files && ev.target.files[0];
+    // =============================================
+    // 파일 첨부
+    // =============================================
+    fileInput.addEventListener("change", function(ev) {
+      var f = ev.target.files && ev.target.files[0];
       if (!f) return;
       currentFileName = f.name;
       fileNameEl.textContent = "📄 " + f.name;
-      try {
-        const reader = new FileReader();
-        reader.onload = function() {
-          currentFileText = String(reader.result || "").slice(0, 500);
-        };
-        reader.onerror = function() {
-          currentFileText = "";
-          fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)";
-        };
-        reader.readAsText(f);
-      } catch (err) {
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        currentFileText = String(reader.result || "").slice(0, 500);
+      };
+      reader.onerror = function() {
         currentFileText = "";
-      }
+        fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)";
+      };
+      reader.readAsText(f);
     });
 
     function toggleImg() {
       needImage = !needImage;
-      imgToggleBtn.textContent = "🖼️ 이미지 생성 프롬프트: " + (needImage ? "ON" : "OFF");
+      imgToggleBtn.textContent = "🖼️ 이미지 프롬프트: " + (needImage ? "ON" : "OFF");
       imgToggleBtn.classList.toggle("active", needImage);
     }
 
@@ -209,9 +296,12 @@
       sendMsg();
     }
 
+    // =============================================
+    // UI 함수
+    // =============================================
     function showTyping() {
-      const id = "t" + Date.now();
-      const div = document.createElement("div");
+      var id = "t" + Date.now();
+      var div = document.createElement("div");
       div.className = "msg ai";
       div.id = id;
       div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
@@ -221,7 +311,7 @@
     }
 
     function hideTyping(id) {
-      const el = document.getElementById(id);
+      var el = document.getElementById(id);
       if (el) el.remove();
     }
 
@@ -241,7 +331,7 @@
     }
 
     function addMsg(html, type) {
-      const div = document.createElement("div");
+      var div = document.createElement("div");
       div.className = "msg " + type;
       div.innerHTML = '<div class="bubble">' + html + '</div>';
       msgBox.appendChild(div);
@@ -249,52 +339,52 @@
     }
 
     function formatResponse(data) {
-      let html = "";
+      var html = "";
+
       if (data.imageUrl) {
-        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="관련 이미지" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.field ? data.analysis.field : "") + ' 관련 이미지</div></div>';
+        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.field || "") + ' 관련</div></div>';
       }
+
       html += md2html(data.response || "응답 없음");
 
       if (data.kmooc && data.kmooc.length > 0) {
-        html += '<div style="margin-top:14px;"><h3>📚 추천 K-MOOC 강좌</h3></div>';
+        html += '<div style="margin-top:14px"><h3>📚 추천 K-MOOC 강좌</h3></div>';
         data.kmooc.forEach(function(c) {
-          html += '<div class="course-card">';
-          html += '<h4>' + esc(c.name) + '</h4>';
+          html += '<div class="course-card"><h4>' + esc(c.name) + '</h4>';
           html += '<div class="meta">👨‍🏫 ' + esc(c.professor) + ' | 🏫 ' + esc(c.org) + '</div>';
           if (c.period) html += '<div class="meta">📅 ' + esc(c.period) + '</div>';
-          html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강좌 바로가기</a>';
-          html += '</div>';
+          html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank">🔗 바로가기</a></div>';
         });
       } else {
-        html += '<div class="no-data" style="margin-top:12px;">📚 K-MOOC 추천 강좌를 찾지 못했습니다.</div>';
-        html += '<div class="no-data"><a href="https://www.kmooc.kr" target="_blank" rel="noopener">🔎 K-MOOC 바로가기</a></div>';
+        html += '<div class="no-data" style="margin-top:12px">📚 K-MOOC 추천 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC 검색</a></div>';
       }
 
       if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:14px;"><h3>🎓 학점은행제 추천 과목</h3></div>';
+        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 추천 과목</h3></div>';
         data.credit.forEach(function(c) {
-          html += '<div class="credit-card">';
-          html += '<h4>' + esc(c.subject) + '</h4>';
+          html += '<div class="credit-card"><h4>' + esc(c.subject) + '</h4>';
           html += '<div class="meta">🏢 ' + esc(c.org) + '</div>';
-          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a>';
-          html += '</div>';
+          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank">🔗 검색</a></div>';
         });
       }
 
       return html;
     }
 
+    // =============================================
+    // 메시지 전송
+    // =============================================
     function sendMsg() {
-      const text = msgInput.value.trim();
+      var text = msgInput.value.trim();
       if (!text && !currentFileText) return;
 
       addMsg(esc(text || "(파일만 첨부)"), "user");
       msgInput.value = "";
       sendBtn.disabled = true;
 
-      const typingId = showTyping();
+      var typingId = showTyping();
 
-      jsonpRequest({
+      apiRequest({
         type: "chat",
         msg: text.slice(0, 700),
         sid: sid,
@@ -312,7 +402,14 @@
         })
         .catch(function(err) {
           hideTyping(typingId);
-          addMsg('<div class="error-box">❌ ' + esc(err.message || String(err)) + '</div>', "ai");
+          addMsg(
+            '<div class="error-box">❌ 모든 통신 방식 실패<br/>' + esc(err.message) + '</div>' +
+            '<div class="debug-box">🔧 디버그 정보:<br/>' +
+            '1) 브라우저 새 탭에서 이 URL을 직접 열어보세요:<br/>' +
+            '<a href="' + API_URL + '?type=ping" target="_blank">' + API_URL + '?type=ping</a><br/>' +
+            '2) JSON이 보이면 Apps Script는 정상입니다.<br/>' +
+            '3) Google 로그인 화면이 보이면 배포 설정이 "누구나"가 아닙니다.</div>', "ai"
+          );
         })
         .finally(function() {
           sendBtn.disabled = false;
@@ -321,32 +418,42 @@
           fileInput.value = "";
           fileNameEl.textContent = "선택된 파일 없음";
           needImage = false;
-          imgToggleBtn.textContent = "🖼️ 이미지 생성 프롬프트: OFF";
+          imgToggleBtn.textContent = "🖼️ 이미지 프롬프트: OFF";
           imgToggleBtn.classList.remove("active");
           msgInput.focus();
         });
     }
 
     function clearChat() {
-      jsonpRequest({ type: "clear", sid: sid }, 20000)
+      apiRequest({ type: "clear", sid: sid }, 20000)
         .then(function() {
           msgBox.innerHTML = "";
           addMsg("대화가 초기화되었습니다! 😊", "ai");
         })
         .catch(function() {
           msgBox.innerHTML = "";
-          addMsg("대화 초기화 중 오류가 발생했습니다.", "ai");
+          addMsg("초기화 오류 발생", "ai");
         });
     }
 
+    // =============================================
+    // 시작 시 연결 테스트
+    // =============================================
     window.onload = function() {
-      jsonpRequest({ type: "ping" }, 20000)
+      console.log("[EduBuddy] ping 시작...");
+
+      apiRequest({ type: "ping" }, 20000)
         .then(function(d) {
           console.log("✅ 연결 성공:", d);
         })
         .catch(function(e) {
           console.error("❌ 연결 실패:", e);
-          addMsg('<div class="error-box">⚠️ 서버 연결 실패. Apps Script 배포 설정을 확인하세요.<br/>' + esc(e.message || "") + '</div>', "ai");
+          addMsg(
+            '<div class="error-box">⚠️ 서버 연결 실패<br/>' + esc(e.message) + '</div>' +
+            '<div class="debug-box">🔧 아래 링크를 새 탭에서 열어보세요:<br/>' +
+            '<a href="' + API_URL + '?type=ping" target="_blank">Apps Script 직접 테스트</a><br/>' +
+            'JSON이 보이면 정상, 로그인 화면이면 배포 설정 문제</div>', "ai"
+          );
         });
     };
   </script>
