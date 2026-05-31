@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>EduBuddy</title>
+  <title>EduBuddy Pro</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Segoe UI','Malgun Gothic',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
@@ -22,10 +22,10 @@
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
     .msg.user{justify-content:flex-end;}
     .msg.ai{justify-content:flex-start;}
-    .bubble{max-width:85%;padding:12px 16px;border-radius:16px;line-height:1.6;word-break:break-word;font-size:14px;}
+    .bubble{max-width:85%;padding:12px 16px;border-radius:16px;line-height:1.7;word-break:break-word;font-size:14px;}
     .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:4px;}
     .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,.08);border-bottom-left-radius:4px;}
-    .bubble h2,.bubble h3{color:#667eea;margin:10px 0 6px;font-size:.98rem;}
+    .bubble h2,.bubble h3{color:#667eea;margin:12px 0 6px;font-size:1rem;}
     .bubble strong{color:#764ba2;}
     .bubble a{color:#5568d3;text-decoration:none;}
     .bubble a:hover{text-decoration:underline;}
@@ -37,8 +37,9 @@
     .credit-card h4{color:#34a853;font-size:.92rem;margin-bottom:3px;}
     .credit-card .meta{color:#555;font-size:.82rem;margin:2px 0;}
     .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff!important;padding:6px 10px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;}
-    .no-data{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;}
+    .notice-box{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;font-size:.88rem;}
     .error-box{background:#f8d7da;border-left:4px solid #dc3545;padding:10px 12px;margin:8px 0;border-radius:8px;color:#721c24;}
+    .info-box{background:#e8f4fd;border-left:4px solid #0d6efd;padding:10px 12px;margin:8px 0;border-radius:8px;color:#084298;font-size:.88rem;}
     .input-area{padding:12px 14px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:10px;align-items:center;}
     #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;}
     #msgInput:focus{border-color:#667eea;}
@@ -56,18 +57,18 @@
 <body>
   <div class="container">
     <header>
-      <h1>🎓 EduBuddy</h1>
-      <div class="subtitle">AI 진로·학습 맞춤 도우미</div>
+      <h1>🎓 EduBuddy Pro</h1>
+      <div class="subtitle">고등학생 맞춤 AI 진로·학습·세특 도우미</div>
       <div class="status" id="status">서버 연결 확인 중...</div>
     </header>
 
     <div class="quick-btns">
-      <button class="quick-btn" onclick="ask('프로그래머가 되고 싶어요. 세특 추천해주세요.')">💻 AI/개발</button>
-      <button class="quick-btn" onclick="ask('의사가 되고 싶어요. 세특도 도와주세요.')">⚕️ 의학</button>
-      <button class="quick-btn" onclick="ask('경제학 관련 강의 추천해주세요.')">📊 경제학</button>
-      <button class="quick-btn" onclick="ask('디자인 진로 상담해주세요.')">🎨 디자인</button>
+      <button class="quick-btn" onclick="ask('의사가 되고 싶어요. 세특 좀 짜주세요.')">⚕️ 의학</button>
+      <button class="quick-btn" onclick="ask('프로그래머가 되고 싶어요. 세특 추천해주세요.')">💻 개발</button>
       <button class="quick-btn" onclick="ask('심리학 세특 어떻게 써야 할까요?')">🧠 심리학</button>
       <button class="quick-btn" onclick="ask('데이터 분석가가 되려면 뭘 배워야 해요?')">📈 데이터</button>
+      <button class="quick-btn" onclick="ask('경제학 관련 강의 추천해주세요.')">📊 경제학</button>
+      <button class="quick-btn" onclick="ask('디자인 진로 상담해주세요.')">🎨 디자인</button>
     </div>
 
     <div class="chat-box">
@@ -78,26 +79,27 @@
       <div class="messages" id="messages">
         <div class="msg ai">
           <div class="bubble">
-            안녕하세요! 👋 <strong>EduBuddy</strong>입니다.<br><br>
-            📝 세특 추천<br>
-            📚 K-MOOC 강의 추천<br>
-            🎓 학점은행제 과목 추천<br><br>
+            안녕하세요! 👋 <strong>EduBuddy Pro</strong>입니다.<br><br>
+            🎯 <strong>진로 상담</strong>: 관심 분야 맞춤 진로 안내<br>
+            📝 <strong>세특 작성</strong>: 교과별 세부능력특기사항 초안<br>
+            📚 <strong>K-MOOC 강의</strong>: 실제 강좌 검색 + 상세 링크<br>
+            🏫 <strong>교과 연계</strong>: 수업과 연결하는 탐구 주제<br>
+            🎓 <strong>학점은행제</strong>: 졸업 후 활용 과목 안내<br><br>
             궁금한 내용을 입력해 주세요 😊
           </div>
         </div>
       </div>
 
       <div class="input-area">
-        <input id="msgInput" type="text" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()" />
+        <input id="msgInput" type="text" placeholder="예: 의사가 되고 싶은데 세특 좀 도와줘..." onkeydown="if(event.key==='Enter') sendMsg()" />
         <button id="sendBtn" onclick="sendMsg()">전송</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ★★★ 본인 Apps Script 웹앱 URL로 교체하세요 ★★★
-    // 반드시 /exec 로 끝나야 합니다!
-    var API_URL = "https://script.google.com/macros/s/AKfycbyhPrXo5AnILMFWVJKGTY9R9jZs1wuVTxasDNWSMIYXm-HybScBdr8b0VdsiK0f7RnJ/exec";
+    // ★★★ 본인 Apps Script 웹앱 URL 로 교체하세요 ★★★
+    var API_URL = "https://script.google.com/macros/s/AKfycbywGgLcs65t10vepXhtexUbdwQqnHpS940b9YsJR2K2FUEUgBD0Aj2jtxYdve7Nc1k5/exec";
 
     var msgBox   = document.getElementById("messages");
     var msgInput = document.getElementById("msgInput");
@@ -105,39 +107,31 @@
     var statusEl = document.getElementById("status");
 
     // =========================================================
-    // ★ JSONP 방식 API 요청 (CORS 우회)
+    // JSONP 방식 API 요청
     // =========================================================
     function apiRequest(params, timeoutMs) {
       timeoutMs = timeoutMs || 120000;
 
       return new Promise(function(resolve, reject) {
-        // 고유 콜백 이름 생성
         var cbName = "__edubuddy_" + Date.now() + "_" + Math.random().toString(36).substr(2,6);
-
-        // callback 파라미터 추가
         params.callback = cbName;
 
-        // 쿼리스트링 생성
         var qs = Object.keys(params).map(function(k) {
           return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
         }).join("&");
 
-        // script 태그 생성
         var script = document.createElement("script");
         script.src = API_URL + "?" + qs;
         script.async = true;
 
         var done = false;
-
-        // 타임아웃
         var timer = setTimeout(function() {
           if (done) return;
           done = true;
           cleanup();
-          reject(new Error("요청 시간 초과 (" + (timeoutMs/1000) + "초)"));
+          reject(new Error("요청 시간 초과"));
         }, timeoutMs);
 
-        // 콜백 함수 등록 (Apps Script가 이 함수를 호출함)
         window[cbName] = function(data) {
           if (done) return;
           done = true;
@@ -145,37 +139,28 @@
           resolve(data);
         };
 
-        // script 로드 실패
         script.onerror = function() {
           if (done) return;
           done = true;
           cleanup();
-          reject(new Error("서버 요청 실패. URL 또는 배포 권한을 확인하세요."));
+          reject(new Error("서버 요청 실패"));
         };
 
-        // 정리 함수
         function cleanup() {
           clearTimeout(timer);
           try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
           if (script.parentNode) script.parentNode.removeChild(script);
         }
 
-        // 실행
         document.body.appendChild(script);
       });
     }
 
-    // =========================================================
-    // 빠른 질문 버튼
-    // =========================================================
     function ask(text) {
       msgInput.value = text;
       sendMsg();
     }
 
-    // =========================================================
-    // UI 헬퍼
-    // =========================================================
     function esc(s) {
       return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
@@ -222,33 +207,43 @@
       var html = "";
 
       // 메인 AI 응답
-      html += md2html(data.response || "응답이 없습니다.");
+      html += md2html(data.response || "응답을 생성하지 못했습니다.");
 
-      // K-MOOC
+      // K-MOOC 카드
       if (data.kmooc && data.kmooc.length > 0) {
-        html += '<div style="margin-top:14px"><h3>📚 추천 K-MOOC 강좌</h3></div>';
+        html += '<div style="margin-top:14px"><h3>📚 K-MOOC 추천 강의</h3></div>';
         data.kmooc.forEach(function(c) {
           html += '<div class="course-card">';
           html += '<h4>' + esc(c.name) + '</h4>';
           html += '<div class="meta">👨‍🏫 ' + esc(c.professor||"-") + ' | 🏫 ' + esc(c.org||"-") + '</div>';
           if (c.period) html += '<div class="meta">📅 ' + esc(c.period) + '</div>';
-          html += '<a class="course-link" href="' + esc(c.url||"https://www.kmooc.kr") + '" target="_blank" rel="noopener">🔗 바로가기</a>';
+          html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강의 상세 보기</a>';
           html += '</div>';
         });
       } else {
-        html += '<div class="no-data" style="margin-top:12px">📚 추천 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC 검색</a></div>';
+        html += '<div class="info-box" style="margin-top:12px">';
+        html += '📚 K-MOOC에서 관련 강좌를 찾지 못했습니다. ';
+        html += '<a href="https://www.kmooc.kr" target="_blank" rel="noopener">K-MOOC에서 직접 검색하기 →</a>';
+        html += '</div>';
       }
 
-      // 학점은행제
+      // 학점은행제 카드
       if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 추천 과목</h3></div>';
+        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
+        html += '<div class="notice-box">⚠️ 학점은행제는 <strong>고등학교 졸업자 이상</strong>만 학점 인정이 가능합니다. 졸업 후 대학 진학·편입·학위 취득 시 참고하세요.</div>';
         data.credit.forEach(function(c) {
           html += '<div class="credit-card">';
           html += '<h4>' + esc(c.subject) + '</h4>';
-          html += '<div class="meta">🏢 ' + esc(c.organization||"-") + '</div>';
-          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a>';
+          html += '<div class="meta">🏢 ' + esc(c.organization) + '</div>';
+          html += '<a class="credit-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 공시정보 검색</a>';
           html += '</div>';
         });
+      } else {
+        html += '<div class="info-box" style="margin-top:12px">';
+        html += '🎓 학점은행제 관련 과목을 찾지 못했습니다. ';
+        html += '<a href="https://www.cbinfo.or.kr" target="_blank" rel="noopener">학점은행제 공시정보에서 직접 검색하기 →</a>';
+        html += '<br><small>※ 학점은행제는 고등학교 졸업 후 활용 가능합니다.</small>';
+        html += '</div>';
       }
 
       return html;
@@ -277,7 +272,7 @@
         if (data && data.status === "success" && data.data) {
           addMsg(formatResponse(data.data), "ai");
         } else {
-          addMsg('<div class="error-box">❌ ' + esc((data && data.message) || "알 수 없는 오류") + '</div>', "ai");
+          addMsg('<div class="error-box">❌ ' + esc((data && data.message) || "알 수 없는 오류가 발생했습니다.") + '</div>', "ai");
         }
       })
       .catch(function(err) {
@@ -302,7 +297,6 @@
         if (d && d.status === "online") {
           statusEl.textContent = "✅ 서버 연결 성공 | Groq: " + (d.groq?"ON":"OFF") + " | 공공데이터: " + (d.data?"ON":"OFF");
           statusEl.style.color = "#b8ffb8";
-          console.log("✅ 연결 성공:", d);
         } else {
           statusEl.textContent = "⚠️ 서버 응답 이상";
           statusEl.style.color = "#ffdf7e";
@@ -316,14 +310,12 @@
           '<div class="error-box">' +
           '⚠️ <strong>서버 연결 실패</strong><br><br>' +
           '확인사항:<br>' +
-          '1. Apps Script에서 <strong>배포 → 배포 관리 → 연필 아이콘 → 새 버전 → 배포</strong> 했는지<br>' +
+          '1. Apps Script에서 <strong>배포 → 배포 관리 → 연필 아이콘 → 새 버전 → 배포</strong><br>' +
           '2. 액세스 권한이 <strong>"모든 사용자"</strong>인지<br>' +
           '3. HTML의 API_URL이 <strong>/exec</strong>로 끝나는지<br>' +
           '<br><small>' + esc(err.message) + '</small></div>',
           "ai"
         );
-
-        console.error("❌ 연결 실패:", err);
       });
     };
   </script>
