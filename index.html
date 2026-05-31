@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>EduBuddy</title>
-
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:Segoe UI,Malgun Gothic,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
@@ -61,10 +60,8 @@
     .typing span:nth-child(3){animation-delay:.4s;}
     @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
     @media(max-width:600px){.chat-box{height:560px;}.bubble{max-width:92%;font-size:13px;}}
-    .debug-box{background:#e8f4fd;border-left:4px solid #2196f3;padding:8px 12px;margin:8px 0;border-radius:8px;color:#0d47a1;font-size:12px;word-break:break-all;}
   </style>
 </head>
-
 <body>
   <div class="container">
     <header>
@@ -91,8 +88,10 @@
         <div class="msg ai">
           <div class="bubble">
             안녕하세요! 👋
-            <br/>📝 세특 추천 · 📚 강의 추천 + 링크
-            <br/>🎓 학점은행제 추천 · 📎 TXT 첨부 가능
+            <br/>📝 세특 추천
+            <br/>📚 강의 추천 + 링크
+            <br/>🎓 학점은행제 추천
+            <br/>📎 TXT 첨부 가능
           </div>
         </div>
       </div>
@@ -114,7 +113,7 @@
 
   <script>
     // ✅ 본인 Apps Script 웹앱 URL로 교체
-    var API_URL = "https://script.google.com/macros/s/AKfycbxqGXIqqZDdvhMqekjlXouEQOexiUZGMidxSMGPzVd-Yc_fNEw7HNxzJVtWEb_2-h73/exec";
+    var API_URL = "https://script.google.com/macros/s/AKfycbzuB4xDirq5t7ez0HCyzM8C5z0vXMX2yycMuuEmMKddL9OyQRdekmMEyvCkoWobyJOb/exec";
 
     var sid = localStorage.getItem("edubuddy_sid");
     if (!sid) {
@@ -134,8 +133,7 @@
     var currentFileName = "";
 
     // =============================================
-    // 핵심: 3단계 폴백 요청 함수
-    // 1) fetch  2) XHR  3) JSONP
+    // API 요청 (fetch 단일 방식)
     // =============================================
     function apiRequest(params, timeoutMs) {
       timeoutMs = timeoutMs || 120000;
@@ -146,122 +144,13 @@
 
       var url = API_URL + "?" + query;
 
-      console.log("[EduBuddy] 요청 URL 길이:", url.length);
-
-      // ---- 방법 1: fetch ----
-      return tryFetch(url, timeoutMs)
-        .catch(function(fetchErr) {
-          console.warn("[EduBuddy] fetch 실패:", fetchErr.message, "→ XHR 시도");
-          // ---- 방법 2: XHR ----
-          return tryXHR(url, timeoutMs);
-        })
-        .catch(function(xhrErr) {
-          console.warn("[EduBuddy] XHR 실패:", xhrErr.message, "→ JSONP 시도");
-          // ---- 방법 3: JSONP ----
-          return tryJSONP(params, timeoutMs);
-        });
-    }
-
-    function tryFetch(url, timeoutMs) {
-      return new Promise(function(resolve, reject) {
-        var controller = null;
-        var timer = null;
-
-        if (typeof AbortController !== "undefined") {
-          controller = new AbortController();
-        }
-
-        timer = setTimeout(function() {
-          if (controller) controller.abort();
-          reject(new Error("fetch timeout"));
-        }, timeoutMs);
-
-        fetch(url, {
-          method: "GET",
-          redirect: "follow",
-          signal: controller ? controller.signal : undefined
-        })
-          .then(function(resp) {
-            clearTimeout(timer);
-            if (!resp.ok) throw new Error("HTTP " + resp.status);
-            return resp.text();
-          })
-          .then(function(text) {
-            console.log("[EduBuddy] fetch 성공, 응답 길이:", text.length);
-            try {
-              resolve(JSON.parse(text));
-            } catch (e) {
-              reject(new Error("JSON parse 실패: " + text.substring(0, 200)));
-            }
-          })
-          .catch(function(err) {
-            clearTimeout(timer);
-            reject(err);
-          });
-      });
-    }
-
-    function tryXHR(url, timeoutMs) {
-      return new Promise(function(resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", url, true);
-        xhr.timeout = timeoutMs;
-
-        xhr.onload = function() {
-          if (xhr.status >= 200 && xhr.status < 400) {
-            console.log("[EduBuddy] XHR 성공");
-            try {
-              resolve(JSON.parse(xhr.responseText));
-            } catch (e) {
-              reject(new Error("XHR JSON parse 실패"));
-            }
-          } else {
-            reject(new Error("XHR HTTP " + xhr.status));
-          }
-        };
-
-        xhr.onerror = function() { reject(new Error("XHR network error")); };
-        xhr.ontimeout = function() { reject(new Error("XHR timeout")); };
-        xhr.send();
-      });
-    }
-
-    function tryJSONP(params, timeoutMs) {
-      return new Promise(function(resolve, reject) {
-        var cbName = "__edubuddy_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-        params.callback = cbName;
-
-        var query = Object.keys(params).map(function(k) {
-          return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
-        }).join("&");
-
-        var script = document.createElement("script");
-        var timer = null;
-
-        function cleanup() {
-          clearTimeout(timer);
-          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        window[cbName] = function(data) {
-          cleanup();
-          console.log("[EduBuddy] JSONP 성공");
-          resolve(data);
-        };
-
-        script.onerror = function() {
-          cleanup();
-          reject(new Error("JSONP도 실패. URL을 브라우저에서 직접 열어보세요: " + API_URL + "?type=ping"));
-        };
-
-        timer = setTimeout(function() {
-          cleanup();
-          reject(new Error("JSONP timeout"));
-        }, timeoutMs);
-
-        script.src = API_URL + "?" + query;
-        document.body.appendChild(script);
+      return fetch(url, {
+        method: "GET",
+        mode: "cors",
+        redirect: "follow"
+      }).then(function(resp) {
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        return resp.json();
       });
     }
 
@@ -273,15 +162,9 @@
       if (!f) return;
       currentFileName = f.name;
       fileNameEl.textContent = "📄 " + f.name;
-
       var reader = new FileReader();
-      reader.onload = function() {
-        currentFileText = String(reader.result || "").slice(0, 500);
-      };
-      reader.onerror = function() {
-        currentFileText = "";
-        fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)";
-      };
+      reader.onload = function() { currentFileText = String(reader.result || "").slice(0, 500); };
+      reader.onerror = function() { currentFileText = ""; fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)"; };
       reader.readAsText(f);
     });
 
@@ -309,16 +192,13 @@
       msgBox.scrollTop = msgBox.scrollHeight;
       return id;
     }
-
     function hideTyping(id) {
       var el = document.getElementById(id);
       if (el) el.remove();
     }
-
     function esc(str) {
       return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
-
     function md2html(text) {
       if (!text) return "";
       return String(text)
@@ -329,7 +209,6 @@
         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
         .replace(/\n/g, "<br/>");
     }
-
     function addMsg(html, type) {
       var div = document.createElement("div");
       div.className = "msg " + type;
@@ -340,11 +219,9 @@
 
     function formatResponse(data) {
       var html = "";
-
       if (data.imageUrl) {
-        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.field || "") + ' 관련</div></div>';
+        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.career_field || "") + ' 관련</div></div>';
       }
-
       html += md2html(data.response || "응답 없음");
 
       if (data.kmooc && data.kmooc.length > 0) {
@@ -363,11 +240,10 @@
         html += '<div style="margin-top:14px"><h3>🎓 학점은행제 추천 과목</h3></div>';
         data.credit.forEach(function(c) {
           html += '<div class="credit-card"><h4>' + esc(c.subject) + '</h4>';
-          html += '<div class="meta">🏢 ' + esc(c.org) + '</div>';
+          html += '<div class="meta">🏢 ' + esc(c.organization || c.org) + '</div>';
           html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank">🔗 검색</a></div>';
         });
       }
-
       return html;
     }
 
@@ -386,7 +262,7 @@
 
       apiRequest({
         type: "chat",
-        msg: text.slice(0, 700),
+        message: text.slice(0, 700),
         sid: sid,
         file: String(currentFileText || "").slice(0, 500),
         fname: String(currentFileName || "").slice(0, 100),
@@ -402,14 +278,7 @@
         })
         .catch(function(err) {
           hideTyping(typingId);
-          addMsg(
-            '<div class="error-box">❌ 모든 통신 방식 실패<br/>' + esc(err.message) + '</div>' +
-            '<div class="debug-box">🔧 디버그 정보:<br/>' +
-            '1) 브라우저 새 탭에서 이 URL을 직접 열어보세요:<br/>' +
-            '<a href="' + API_URL + '?type=ping" target="_blank">' + API_URL + '?type=ping</a><br/>' +
-            '2) JSON이 보이면 Apps Script는 정상입니다.<br/>' +
-            '3) Google 로그인 화면이 보이면 배포 설정이 "누구나"가 아닙니다.</div>', "ai"
-          );
+          addMsg('<div class="error-box">❌ 통신 오류: ' + esc(err.message) + '</div>', "ai");
         })
         .finally(function() {
           sendBtn.disabled = false;
@@ -440,20 +309,13 @@
     // 시작 시 연결 테스트
     // =============================================
     window.onload = function() {
-      console.log("[EduBuddy] ping 시작...");
-
-      apiRequest({ type: "ping" }, 20000)
+      apiRequest({ type: "handshake" }, 20000)
         .then(function(d) {
           console.log("✅ 연결 성공:", d);
         })
         .catch(function(e) {
           console.error("❌ 연결 실패:", e);
-          addMsg(
-            '<div class="error-box">⚠️ 서버 연결 실패<br/>' + esc(e.message) + '</div>' +
-            '<div class="debug-box">🔧 아래 링크를 새 탭에서 열어보세요:<br/>' +
-            '<a href="' + API_URL + '?type=ping" target="_blank">Apps Script 직접 테스트</a><br/>' +
-            'JSON이 보이면 정상, 로그인 화면이면 배포 설정 문제</div>', "ai"
-          );
+          addMsg('<div class="error-box">⚠️ 서버 연결 실패<br/>' + esc(e.message) + '</div>', "ai");
         });
     };
   </script>
