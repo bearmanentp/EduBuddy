@@ -126,7 +126,8 @@
 
     <script>
         // 💡 [웹앱 URL 입력 칸] 배포한 구글 앱스크립트 웹앱 URL 주소를 여기에 넣어줘!
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzxRwSQJBFX67_LoUnwVYbWWBgtyLoYNF8EhJBujbPwHFfJfIs-1jFfBleRYBzaXGJp/exec";
+        // 형식: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwKNagUagy-PySFB6a3V03-iWSaJ_W0yv6tg1gpjpOr0euZS-Wi3aokzCzidXInI9Sv/exec";
 
         function generateDashboard() {
             const userInput = document.getElementById('userInput').value.trim();
@@ -138,7 +139,7 @@
             }
 
             if(WEB_APP_URL === "구글_앱스크립트_웹앱_URL_넣는_칸" || !WEB_APP_URL.startsWith("https")) {
-                alert("HTML 코드 상단의 WEB_APP_URL 변수에 실제 앱스크립트 웹앱 주소를 입력해야 연동됩니다!");
+                alert("HTML 코드 상단의 WEB_APP_URL 변수에 실제 앱스크립트 웹앱 주소를 입력해야 연동됩니다!\n\n형식: https://script.google.com/macros/s/.../exec");
                 return;
             }
 
@@ -146,22 +147,29 @@
             const dashboard = document.getElementById('dashboard');
             const errorPanel = document.getElementById('errorPanel');
             
-            // UI 상태 변경 및 버튼 비활성화 (중복 스트림 방지)
             loading.classList.remove('hidden');
             dashboard.classList.add('hidden');
             errorPanel.classList.add('hidden');
             submitBtn.disabled = true;
             submitBtn.innerText = "데이터 요청 및 AI 분석 중...";
 
+            // 🔑 핵심 수정: application/json으로 전송, CORS 우회
             fetch(WEB_APP_URL, {
                 method: "POST",
-                contentType: "text/plain", 
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
                     action: 'searchAndRecommend',
                     userInput: userInput
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                }
+                return res.json();
+            })
             .then(responseObj => {
                 loading.classList.add('hidden');
                 submitBtn.disabled = false;
@@ -170,7 +178,7 @@
                 if(responseObj.success) {
                     displayData(responseObj.data);
                 } else {
-                    document.getElementById('errorMsg').innerText = responseObj.error;
+                    document.getElementById('errorMsg').innerText = responseObj.error || "알 수 없는 서버 오류";
                     errorPanel.classList.remove('hidden');
                 }
             })
@@ -179,9 +187,9 @@
                 submitBtn.disabled = false;
                 submitBtn.innerText = "오픈 API 통합 데이터 로드 및 AI 맞춤 분석 시작";
                 
-                document.getElementById('errorMsg').innerText = "앱스크립트 엔드포인트 통신 실패 (디코딩된 서비스키 검증 또는 배포 설정을 확인하세요)";
+                document.getElementById('errorMsg').innerText = `연동 실패: ${err.message}\n\n확인사항:\n1. WEB_APP_URL이 정확한지 확인 (/exec로 끝나는지)\n2. 앱스크립트 배포 시 '누구든지' 권한 설정 확인\n3. API 키가 디코딩된 상태인지 확인`;
                 errorPanel.classList.remove('hidden');
-                console.error(err);
+                console.error("Fetch Error:", err);
             });
         }
 
@@ -190,29 +198,35 @@
             const courseGrid = document.getElementById('courseGrid');
             courseGrid.innerHTML = '';
             
-            aiData.recommended_courses.forEach(course => {
-                const isKmooc = course.source.toUpperCase().includes('K-MOOC');
-                const badgeStyle = isKmooc ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30';
-                
-                const cardHtml = `
-                    <div class="glass-panel p-5 flex flex-col justify-between hover:border-slate-700/80 transition-all hover:-translate-y-1 duration-300 bg-gradient-to-b from-slate-900/20 to-transparent">
-                        <div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-black px-2 py-0.5 rounded border ${badgeStyle}">${course.source}</span>
-                                <span class="text-[11px] text-slate-500 font-medium">${course.institution}</span>
+            if (!aiData.recommended_courses || !Array.isArray(aiData.recommended_courses)) {
+                courseGrid.innerHTML = '<p class="text-slate-400 col-span-3 text-center">추천 강좌 데이터가 없습니다.</p>';
+            } else {
+                aiData.recommended_courses.forEach(course => {
+                    const isKmooc = course.source && course.source.toUpperCase().includes('K-MOOC');
+                    const badgeStyle = isKmooc ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30';
+                    
+                    const cardHtml = `
+                        <div class="glass-panel p-5 flex flex-col justify-between hover:border-slate-700/80 transition-all hover:-translate-y-1 duration-300 bg-gradient-to-b from-slate-900/20 to-transparent">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-black px-2 py-0.5 rounded border ${badgeStyle}">${course.source || '기타'}</span>
+                                    <span class="text-[11px] text-slate-500 font-medium">${course.institution || '-'}</span>
+                                </div>
+                                <h4 class="text-base font-bold text-slate-100 mt-3 tracking-tight">${course.title || '강좌명 없음'}</h4>
+                                <p class="text-xs text-slate-400 mt-2 leading-relaxed text-justify">${course.desc || '설명 없음'}</p>
                             </div>
-                            <h4 class="text-base font-bold text-slate-100 mt-3 tracking-tight">${course.title}</h4>
-                            <p class="text-xs text-slate-400 mt-2 leading-relaxed text-justify">${course.desc}</p>
                         </div>
-                    </div>
-                `;
-                courseGrid.innerHTML += cardHtml;
-            });
+                    `;
+                    courseGrid.innerHTML += cardHtml;
+                });
+            }
 
-            document.getElementById('actTitle').innerText = aiData.sefit_plan.activity_title;
-            document.getElementById('actMotiv').innerText = aiData.sefit_plan.motivation;
-            document.getElementById('actContext').innerText = aiData.sefit_plan.content;
-            document.getElementById('sefitFinal').innerText = `"${aiData.sefit_plan.draft}"`;
+            if (aiData.sefit_plan) {
+                document.getElementById('actTitle').innerText = aiData.sefit_plan.activity_title || '-';
+                document.getElementById('actMotiv').innerText = aiData.sefit_plan.motivation || '-';
+                document.getElementById('actContext').innerText = aiData.sefit_plan.content || '-';
+                document.getElementById('sefitFinal').innerText = `"${aiData.sefit_plan.draft || '-'}"`;
+            }
 
             dashboard.classList.remove('hidden');
         }
