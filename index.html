@@ -36,12 +36,6 @@
     .course-card .meta{color:#555;font-size:0.78rem;margin:2px 0;}
     .course-link{display:inline-block;margin-top:5px;background:#667eea;color:#fff!important;padding:5px 9px;border-radius:5px;text-decoration:none!important;font-size:0.8rem;font-weight:bold;transition:.2s;}
     .course-link:hover{opacity:.85;}
-    .credit-card{background:#f0fff4;border-left:3px solid #34a853;padding:9px 11px;margin:6px 0;border-radius:6px;}
-    .credit-card h4{color:#34a853;font-size:0.88rem;margin-bottom:3px;}
-    .credit-card .meta{color:#555;font-size:0.78rem;margin:2px 0;}
-    .credit-link{display:inline-block;margin-top:5px;background:#34a853;color:#fff!important;padding:5px 9px;border-radius:5px;text-decoration:none!important;font-size:0.8rem;font-weight:bold;transition:.2s;}
-    .credit-link:hover{opacity:.85;}
-    .notice-box{background:#fff3cd;border-left:3px solid #ffc107;padding:8px 10px;margin:6px 0;border-radius:6px;color:#856404;font-size:0.83rem;}
     .error-box{background:#f8d7da;border-left:3px solid #dc3545;padding:8px 10px;margin:6px 0;border-radius:6px;color:#721c24;font-size:0.83rem;}
     .info-box{background:#e8f4fd;border-left:3px solid #0d6efd;padding:8px 10px;margin:6px 0;border-radius:6px;color:#084298;font-size:0.83rem;}
     .input-area{padding:10px 12px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:8px;align-items:center;}
@@ -56,7 +50,6 @@
     .typing span:nth-child(3){animation-delay:.4s;}
     @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
     
-    /* 모바일 최적화 */
     @media(max-width:480px){
       body{padding:8px;}
       h1{font-size:1.5rem;}
@@ -70,11 +63,11 @@
       .messages{padding:10px;}
       .bubble{max-width:92%;padding:10px 12px;font-size:12.5px;border-radius:12px;}
       .bubble h2,.bubble h3{font-size:0.9rem;margin:9px 0 5px;}
-      .course-card,.credit-card{padding:8px 10px;margin:5px 0;}
-      .course-card h4,.credit-card h4{font-size:0.83rem;}
-      .course-card .meta,.credit-card .meta{font-size:0.73rem;}
-      .course-link,.credit-link{padding:4px 8px;font-size:0.75rem;}
-      .notice-box,.error-box,.info-box{padding:7px 9px;font-size:0.78rem;}
+      .course-card{padding:8px 10px;margin:5px 0;}
+      .course-card h4{font-size:0.83rem;}
+      .course-card .meta{font-size:0.73rem;}
+      .course-link{padding:4px 8px;font-size:0.75rem;}
+      .error-box,.info-box{padding:7px 9px;font-size:0.78rem;}
       .input-area{padding:9px 10px;gap:6px;}
       #msgInput{padding:8px 11px;font-size:12.5px;border-radius:18px;}
       #sendBtn{padding:8px 15px;font-size:12.5px;border-radius:18px;}
@@ -122,8 +115,7 @@
             🎯 <strong>진로 로드맵</strong>: 관심 분야 맞춤 진로·학과·역량 안내<br>
             📝 <strong>세특 초안 작성</strong>: 실제 강좌명과 연계한 완성형 문장<br>
             📚 <strong>K-MOOC 강의</strong>: 실제 강좌 검색 + 상세 페이지 링크<br>
-            🏫 <strong>교과 연계 탐구</strong>: 수업과 연결하는 구체적 활동 아이디어<br>
-            🎓 <strong>학점은행제</strong>: 졸업 후 활용 가능한 과목 안내<br>
+            🏫 <strong>교과 연계 탐구</strong>: 진로와 논리적으로 연결되는 활동만<br>
             💡 <strong>행동 계획</strong>: 이번 주/달/학기 단계별 실천 방안<br><br>
             무엇이 궁금하신가요? 😊
           </div>
@@ -139,7 +131,7 @@
 
   <script>
     // ★★★ 본인 Apps Script 웹앱 URL 로 교체하세요 ★★★
-    var API_URL = "https://script.google.com/macros/s/AKfycbzk5Pv7-qpBsU55r0c9hhjdtSn3l_YbKYYnrJvzoFkSDr9qXsKmRL7QqeT2WfaB5HUT/exec";
+    var API_URL = "https://script.google.com/macros/s/AKfycbxnYKQrwJ-EY-8tV3QMGQxhEE3MiSz_npuU9KA-XmWYLhle11QZx7ftzuXEDI8AiDMf/exec";
 
     var msgBox   = document.getElementById("messages");
     var msgInput = document.getElementById("msgInput");
@@ -227,17 +219,6 @@
         });
       }
       
-      if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
-        html += '<div class="notice-box">⚠️ 학점은행제는 <strong>고등학교 졸업자 이상</strong>만 학점 인정이 가능합니다.<br>졸업 후 대학 편입·학위 취득·자격증 준비 시 참고하세요.</div>';
-        data.credit.forEach(function(c) {
-          html += '<div class="credit-card">';
-          html += '<h4>' + esc(c.subject) + '</h4>';
-          html += '<div class="meta">🏢 ' + esc(c.organization) + '</div>';
-          html += '<a class="credit-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 공시정보 검색</a>';
-          html += '</div>';
-        });
-      }
       return html;
     }
 
