@@ -41,12 +41,24 @@
     .credit-link { display: inline-block; margin-top: 4px; background: #34a853; color: white !important; padding: 4px 8px; border-radius: 4px; text-decoration: none !important; font-size: 0.75rem; }
     .no-data { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #856404; }
     .error-box { background: #f8d7da; border-left: 4px solid #dc3545; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #721c24; }
-    .input-area { padding: 12px 15px; background: white; border-top: 1px solid #e0e0e0; display: flex; gap: 8px; }
+    .file-notice { background: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #0c5460; }
+    .related-image { margin: 10px 0; border-radius: 8px; overflow: hidden; }
+    .related-image img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; }
+    .image-caption { text-align: center; font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic; }
+    .input-area { padding: 12px 15px; background: white; border-top: 1px solid #e0e0e0; display: flex; flex-direction: column; gap: 8px; }
+    .input-row { display: flex; gap: 8px; }
     #msgInput { flex: 1; padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 22px; font-size: 14px; outline: none; }
     #msgInput:focus { border-color: #667eea; }
     #sendBtn { padding: 10px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 22px; font-size: 14px; font-weight: bold; cursor: pointer; }
     #sendBtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(102,126,234,0.4); }
     #sendBtn:disabled { background: #ccc; cursor: wait; }
+    .file-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .file-label { padding: 6px 12px; background: #f0f4ff; border: 1px dashed #667eea; border-radius: 15px; cursor: pointer; font-size: 12px; color: #667eea; }
+    .file-label:hover { background: #e8eeff; }
+    #fileInput { display: none; }
+    .file-name { font-size: 12px; color: #666; }
+    .img-toggle { padding: 6px 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 15px; cursor: pointer; font-size: 12px; color: #856404; }
+    .img-toggle.active { background: #ffc107; color: white; }
     .typing { display: inline-flex; gap: 4px; padding: 12px 18px; background: white; border-radius: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
     .typing span { width: 7px; height: 7px; background: #667eea; border-radius: 50%; animation: bounce 1.4s infinite; }
     .typing span:nth-child(2) { animation-delay: 0.2s; }
@@ -72,37 +84,81 @@
     <div class="chat-box">
       <div class="chat-header"><span>🤖 EduBuddy AI</span><button class="clear-btn" onclick="clearChat()">대화 초기화</button></div>
       <div class="messages" id="messages">
-        <div class="msg ai"><div class="bubble">안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>📝 <strong>세특 작성</strong> 도움<br>📚 <strong>K-MOOC 강좌</strong> 추천 (링크 제공)<br>🎓 <strong>학점은행제</strong> 과목 안내<br>🎯 <strong>진로 상담</strong><br><br>무엇이든 물어보세요! 😊</div></div>
+        <div class="msg ai"><div class="bubble">안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>📝 <strong>세특 작성</strong> 도움<br>📚 <strong>K-MOOC 강좌</strong> 추천<br>🎓 <strong>학점은행제</strong> 과목 안내<br>🎯 <strong>진로 상담</strong><br>📎 <strong>파일 분석</strong> (TXT, HWP)<br>🖼️ <strong>관련 이미지</strong> 생성<br><br>무엇이든 물어보세요! 😊</div></div>
       </div>
       <div class="input-area">
-        <input type="text" id="msgInput" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()">
-        <button id="sendBtn" onclick="sendMsg()">전송</button>
+        <div class="file-controls">
+          <label class="file-label" for="fileInput">📎 파일 첨부</label>
+          <input type="file" id="fileInput" accept=".txt,.hwp,.text" onchange="handleFileSelect(event)">
+          <span class="file-name" id="fileName">선택된 파일 없음</span>
+          <button class="img-toggle" id="imgToggle" onclick="toggleImage()">🖼️ 이미지 생성: OFF</button>
+        </div>
+        <div class="input-row">
+          <input type="text" id="msgInput" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()">
+          <button id="sendBtn" onclick="sendMsg()">전송</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     // ⚠️ 여기에 Apps Script 배포 URL 입력!
-    var API_URL = 'https://script.google.com/macros/s/AKfycbykek-VSo6J3W8Nf9GkbH2s1yGWM72D-kTr66s9reVfG8JBRp8P1NijyuznP3SSmpM2/exec';
-    var sessionId = localStorage.getItem('edu_session') || ('sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8));
-    localStorage.setItem('edu_session', sessionId);
+    var API_URL = 'https://script.google.com/macros/s/AKfycbxBoQI4dp7-ezYL-luT480GjF_5AR-Fwl2Wy2uAXQQK62MNAunTB_SvAK33xEawZ8jH/exec';
+    var sid = localStorage.getItem('edu_sid') || ('s' + Date.now() + Math.random().toString(36).substr(2, 8));
+    localStorage.setItem('edu_sid', sid);
 
     var msgBox = document.getElementById('messages');
     var msgInput = document.getElementById('msgInput');
     var sendBtn = document.getElementById('sendBtn');
+    var fileInput = document.getElementById('fileInput');
+    var fileNameDisplay = document.getElementById('fileName');
+    var imgToggle = document.getElementById('imgToggle');
+
+    var currentFileContent = '';
+    var currentFileName = '';
+    var needImage = false;
 
     function ask(text) { msgInput.value = text; sendMsg(); }
 
+    function toggleImage() {
+      needImage = !needImage;
+      imgToggle.textContent = '🖼️ 이미지 생성: ' + (needImage ? 'ON' : 'OFF');
+      imgToggle.classList.toggle('active', needImage);
+    }
+
+    function handleFileSelect(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      currentFileName = file.name;
+      fileNameDisplay.textContent = '📄 ' + file.name;
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var content = e.target.result;
+        // 텍스트만 추출 (최대 1000자)
+        currentFileContent = content.substring(0, 1000);
+      };
+      reader.readAsText(file);
+    }
+
     function sendMsg() {
       var text = msgInput.value.trim();
-      if (!text) return;
+      if (!text && !currentFileContent) return;
 
-      addMsg(text, 'user');
+      var displayText = text;
+      if (currentFileContent) {
+        displayText += '\n[첨부 파일: ' + currentFileName + ']';
+      }
+      addMsg(displayText, 'user');
       msgInput.value = '';
       sendBtn.disabled = true;
       var typingId = showTyping();
 
-      var url = API_URL + '?action=chat&message=' + encodeURIComponent(text) + '&sessionId=' + encodeURIComponent(sessionId);
+      // URL 길이 제한으로 파일 내용은 짧게
+      var fileParam = encodeURIComponent(currentFileContent.substring(0, 500));
+      var fnameParam = encodeURIComponent(currentFileName);
+      var url = API_URL + '?type=chat&msg=' + encodeURIComponent(text) + '&sid=' + encodeURIComponent(sid) + '&file=' + fileParam + '&fname=' + fnameParam + '&img=' + needImage;
 
       fetch(url)
         .then(function(res) {
@@ -112,7 +168,7 @@
         .then(function(data) {
           hideTyping(typingId);
           if (data.status === 'success') {
-            addMsg(formatResponse(data.data), 'ai');
+            addMsg(formatResponse(data), 'ai');
           } else {
             addMsg('<div class="error-box">❌ ' + esc(data.message || '알 수 없는 오류') + '</div>', 'ai');
           }
@@ -124,13 +180,29 @@
         .finally(function() {
           sendBtn.disabled = false;
           msgInput.focus();
+          // 파일 초기화
+          currentFileContent = '';
+          currentFileName = '';
+          fileInput.value = '';
+          fileNameDisplay.textContent = '선택된 파일 없음';
         });
     }
 
     function formatResponse(data) {
       var html = '';
+
+      // 관련 이미지
+      if (data.imageUrl) {
+        html += '<div class="related-image">';
+        html += '<img src="' + esc(data.imageUrl) + '" alt="관련 이미지" onerror="this.style.display=\'none\'">';
+        html += '<div class="image-caption">🖼️ ' + esc(data.analysis ? data.analysis.field : '') + ' 관련 이미지</div>';
+        html += '</div>';
+      }
+
+      // AI 응답
       if (data.response) html += md2html(data.response);
 
+      // K-MOOC 강좌
       if (data.kmooc && data.kmooc.length > 0) {
         html += '<div style="margin-top:12px"><h3>📚 K-MOOC 추천 강좌</h3></div>';
         data.kmooc.forEach(function(c) {
@@ -143,6 +215,7 @@
         html += '<div class="no-data">📚 관련 K-MOOC 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC</a>에서 직접 검색해보세요.</div>';
       }
 
+      // 학점은행제
       if (data.credit && data.credit.length > 0) {
         html += '<div style="margin-top:12px"><h3>🎓 학점은행제 과목</h3></div>';
         data.credit.forEach(function(c) {
@@ -182,13 +255,13 @@
 
     function clearChat() {
       if (!confirm('대화 내용을 삭제할까요?')) return;
-      fetch(API_URL + '?action=clear&sessionId=' + encodeURIComponent(sessionId))
+      fetch(API_URL + '?type=clear&sid=' + encodeURIComponent(sid))
         .then(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다! 😊', 'ai'); })
         .catch(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다.', 'ai'); });
     }
 
     window.onload = function() {
-      fetch(API_URL + '?action=ping')
+      fetch(API_URL + '?type=ping')
         .then(function(r) { return r.json(); })
         .then(function(d) { console.log('✅ 연결 성공:', d); })
         .catch(function(e) { console.error('❌ 연결 실패:', e); addMsg('<div class="error-box">⚠️ 서버 연결 실패. Apps Script 배포 URL을 확인하세요.</div>', 'ai'); });
