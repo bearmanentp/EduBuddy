@@ -6,271 +6,53 @@
   <title>EduBuddy - AI 진로·학습 도우미</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 15px;
-    }
-
+    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; }
     .container { max-width: 900px; margin: 0 auto; }
-
     header { text-align: center; color: white; margin-bottom: 15px; }
     h1 { font-size: 2.2rem; margin-bottom: 5px; }
     .subtitle { font-size: 1rem; opacity: 0.9; }
-
-    .quick-btns {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-
-    .quick-btn {
-      padding: 7px 14px;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 18px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.3s;
-    }
-
-    .quick-btn:hover {
-      background: rgba(255,255,255,0.35);
-      transform: translateY(-2px);
-    }
-
-    .chat-box {
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 620px;
-    }
-
-    .chat-header {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 12px 18px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .clear-btn {
-      background: rgba(255,255,255,0.2);
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      background: #f5f7fa;
-    }
-
-    .msg {
-      margin-bottom: 12px;
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
+    .quick-btn { padding: 7px 14px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 18px; cursor: pointer; font-size: 13px; transition: all 0.3s; }
+    .quick-btn:hover { background: rgba(255,255,255,0.35); transform: translateY(-2px); }
+    .chat-box { background: white; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; height: 620px; }
+    .chat-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .clear-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+    .messages { flex: 1; padding: 15px; overflow-y: auto; background: #f5f7fa; }
+    .msg { margin-bottom: 12px; display: flex; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     .msg.user { justify-content: flex-end; }
     .msg.ai { justify-content: flex-start; }
-
-    .bubble {
-      max-width: 85%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      line-height: 1.6;
-      word-break: break-word;
-      font-size: 14px;
-    }
-
-    .msg.user .bubble {
-      background: #667eea;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .msg.ai .bubble {
-      background: white;
-      color: #333;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      border-bottom-left-radius: 4px;
-    }
-
-    .bubble h2, .bubble h3 {
-      color: #667eea;
-      margin: 10px 0 5px;
-      font-size: 0.95rem;
-    }
-
+    .bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; line-height: 1.6; word-break: break-word; font-size: 14px; }
+    .msg.user .bubble { background: #667eea; color: white; border-bottom-right-radius: 4px; }
+    .msg.ai .bubble { background: white; color: #333; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-bottom-left-radius: 4px; }
+    .bubble h2, .bubble h3 { color: #667eea; margin: 10px 0 5px; font-size: 0.95rem; }
     .bubble h2:first-child, .bubble h3:first-child { margin-top: 0; }
     .bubble strong { color: #764ba2; }
     .bubble a { color: #5568d3; text-decoration: none; }
     .bubble a:hover { text-decoration: underline; }
-
-    .course-card {
-      background: linear-gradient(135deg, #f0f4ff, #e8eeff);
-      border-left: 4px solid #667eea;
-      padding: 10px 12px;
-      margin: 6px 0;
-      border-radius: 6px;
-    }
-
-    .course-card h4 {
-      color: #667eea;
-      margin-bottom: 3px;
-      font-size: 0.9rem;
-    }
-
-    .course-card p {
-      font-size: 0.8rem;
-      color: #555;
-      margin: 2px 0;
-    }
-
-    .course-link {
-      display: inline-block;
-      margin-top: 5px;
-      background: #667eea;
-      color: white !important;
-      padding: 5px 10px;
-      border-radius: 4px;
-      text-decoration: none !important;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
+    .course-card { background: linear-gradient(135deg, #f0f4ff, #e8eeff); border-left: 4px solid #667eea; padding: 10px 12px; margin: 6px 0; border-radius: 6px; }
+    .course-card h4 { color: #667eea; margin-bottom: 3px; font-size: 0.9rem; }
+    .course-card p { font-size: 0.8rem; color: #555; margin: 2px 0; }
+    .course-link { display: inline-block; margin-top: 5px; background: #667eea; color: white !important; padding: 5px 10px; border-radius: 4px; text-decoration: none !important; font-size: 0.8rem; font-weight: bold; }
     .course-link:hover { background: #5568d3; }
-
-    .credit-card {
-      background: #f0fff4;
-      border-left: 4px solid #34a853;
-      padding: 8px 12px;
-      margin: 5px 0;
-      border-radius: 6px;
-    }
-
+    .credit-card { background: #f0fff4; border-left: 4px solid #34a853; padding: 8px 12px; margin: 5px 0; border-radius: 6px; }
     .credit-card h4 { color: #34a853; font-size: 0.9rem; }
     .credit-card p { font-size: 0.8rem; color: #555; }
-
-    .credit-link {
-      display: inline-block;
-      margin-top: 4px;
-      background: #34a853;
-      color: white !important;
-      padding: 4px 8px;
-      border-radius: 4px;
-      text-decoration: none !important;
-      font-size: 0.75rem;
-    }
-
-    .no-data {
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      color: #856404;
-    }
-
-    .error-box {
-      background: #f8d7da;
-      border-left: 4px solid #dc3545;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      color: #721c24;
-    }
-
-    .input-area {
-      padding: 12px 15px;
-      background: white;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      gap: 8px;
-    }
-
-    #msgInput {
-      flex: 1;
-      padding: 10px 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 22px;
-      font-size: 14px;
-      outline: none;
-    }
-
+    .credit-link { display: inline-block; margin-top: 4px; background: #34a853; color: white !important; padding: 4px 8px; border-radius: 4px; text-decoration: none !important; font-size: 0.75rem; }
+    .no-data { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #856404; }
+    .error-box { background: #f8d7da; border-left: 4px solid #dc3545; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #721c24; }
+    .input-area { padding: 12px 15px; background: white; border-top: 1px solid #e0e0e0; display: flex; gap: 8px; }
+    #msgInput { flex: 1; padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 22px; font-size: 14px; outline: none; }
     #msgInput:focus { border-color: #667eea; }
-
-    #sendBtn {
-      padding: 10px 24px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      border-radius: 22px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #sendBtn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(102,126,234,0.4);
-    }
-
+    #sendBtn { padding: 10px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 22px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    #sendBtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(102,126,234,0.4); }
     #sendBtn:disabled { background: #ccc; cursor: wait; }
-
-    .typing {
-      display: inline-flex;
-      gap: 4px;
-      padding: 12px 18px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    .typing span {
-      width: 7px;
-      height: 7px;
-      background: #667eea;
-      border-radius: 50%;
-      animation: bounce 1.4s infinite;
-    }
-
+    .typing { display: inline-flex; gap: 4px; padding: 12px 18px; background: white; border-radius: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .typing span { width: 7px; height: 7px; background: #667eea; border-radius: 50%; animation: bounce 1.4s infinite; }
     .typing span:nth-child(2) { animation-delay: 0.2s; }
     .typing span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-8px); }
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.6rem; }
-      .chat-box { height: 520px; }
-      .bubble { max-width: 92%; font-size: 13px; }
-    }
+    @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
+    @media (max-width: 600px) { h1 { font-size: 1.6rem; } .chat-box { height: 520px; } .bubble { max-width: 92%; font-size: 13px; } }
   </style>
 </head>
 <body>
@@ -279,7 +61,6 @@
       <h1>🎓 EduBuddy</h1>
       <p class="subtitle">AI 기반 진로·학습 맞춤형 도우미</p>
     </header>
-
     <div class="quick-btns">
       <button class="quick-btn" onclick="ask('AI 개발자가 되고 싶어요. 추천 강좌와 세특도 알려주세요.')">💻 AI 개발</button>
       <button class="quick-btn" onclick="ask('의사가 되고 싶어요. 세특 작성 도와주세요.')">⚕️ 의학 진로</button>
@@ -288,26 +69,11 @@
       <button class="quick-btn" onclick="ask('심리학 세특 어떻게 쓸까요?')">🧠 심리학</button>
       <button class="quick-btn" onclick="ask('데이터 분석가가 되려면 뭘 배워야 하나요?')">📈 데이터</button>
     </div>
-
     <div class="chat-box">
-      <div class="chat-header">
-        <span>🤖 EduBuddy AI</span>
-        <button class="clear-btn" onclick="clearChat()">대화 초기화</button>
-      </div>
-
+      <div class="chat-header"><span>🤖 EduBuddy AI</span><button class="clear-btn" onclick="clearChat()">대화 초기화</button></div>
       <div class="messages" id="messages">
-        <div class="msg ai">
-          <div class="bubble">
-            안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>
-            📝 <strong>세특 작성</strong> 도움<br>
-            📚 <strong>K-MOOC 강좌</strong> 추천 (링크 제공)<br>
-            🎓 <strong>학점은행제</strong> 과목 안내<br>
-            🎯 <strong>진로 상담</strong><br><br>
-            무엇이든 물어보세요! 😊
-          </div>
-        </div>
+        <div class="msg ai"><div class="bubble">안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>📝 <strong>세특 작성</strong> 도움<br>📚 <strong>K-MOOC 강좌</strong> 추천 (링크 제공)<br>🎓 <strong>학점은행제</strong> 과목 안내<br>🎯 <strong>진로 상담</strong><br><br>무엇이든 물어보세요! 😊</div></div>
       </div>
-
       <div class="input-area">
         <input type="text" id="msgInput" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()">
         <button id="sendBtn" onclick="sendMsg()">전송</button>
@@ -317,63 +83,15 @@
 
   <script>
     // ⚠️ 여기에 Apps Script 배포 URL 입력!
-    var API_URL = 'https://script.google.com/macros/s/AKfycbwYB9m-xeavSW4HJbXX8DfC6sONtUGzrxGH76Jeah29IDdRug-7gB1eS_TxOmCLymlx/exec';
-
-    var sid = localStorage.getItem('edu_sid');
-    if (!sid) {
-      sid = 's' + Date.now() + Math.random().toString(36).substr(2, 8);
-      localStorage.setItem('edu_sid', sid);
-    }
+    var API_URL = 'https://script.google.com/macros/s/AKfycbyN5dRfzEu9iX6013lKOdTPY6zzVMgBmhJGEdYqrqRk2i3BkNCVEvcLpq4jQdbHEX1t/exec';
+    var sid = localStorage.getItem('edu_sid') || ('s' + Date.now() + Math.random().toString(36).substr(2, 8));
+    localStorage.setItem('edu_sid', sid);
 
     var msgBox = document.getElementById('messages');
     var msgInput = document.getElementById('msgInput');
     var sendBtn = document.getElementById('sendBtn');
-    var cbCounter = 0;
 
-    function ask(text) {
-      msgInput.value = text;
-      sendMsg();
-    }
-
-    // ★ JSONP 호출 (CORS 완전 우회)
-    function jsonpCall(params, callback) {
-      var cbName = '_cb_' + (++cbCounter) + '_' + Date.now();
-      var url = API_URL + '?';
-
-      for (var k in params) {
-        if (params.hasOwnProperty(k)) {
-          url += encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) + '&';
-        }
-      }
-      url += 'callback=' + cbName;
-
-      window[cbName] = function(data) {
-        delete window[cbName];
-        var script = document.getElementById(cbName);
-        if (script) script.remove();
-        callback(null, data);
-      };
-
-      var script = document.createElement('script');
-      script.id = cbName;
-      script.src = url;
-      script.onerror = function() {
-        delete window[cbName];
-        if (script.parentNode) script.remove();
-        callback(new Error('JSONP 로드 실패'));
-      };
-
-      // 타임아웃 (30초)
-      setTimeout(function() {
-        if (window[cbName]) {
-          delete window[cbName];
-          if (script.parentNode) script.remove();
-          callback(new Error('요청 시간 초과 (30초)'));
-        }
-      }, 30000);
-
-      document.head.appendChild(script);
-    }
+    function ask(text) { msgInput.value = text; sendMsg(); }
 
     function sendMsg() {
       var text = msgInput.value.trim();
@@ -382,84 +100,68 @@
       addMsg(text, 'user');
       msgInput.value = '';
       sendBtn.disabled = true;
-
       var typingId = showTyping();
 
-      jsonpCall({ type: 'chat', msg: text, sid: sid }, function(err, data) {
-        hideTyping(typingId);
+      // ✅ GET 요청만 사용 (참고 코드와 동일한 방식)
+      var url = API_URL + '?type=chat&msg=' + encodeURIComponent(text) + '&sid=' + encodeURIComponent(sid);
 
-        if (err) {
-          addMsg('<div class="error-box">❌ ' + esc(err.message) + '</div>', 'ai');
-        } else if (data.status === 'success') {
-          addMsg(formatResponse(data), 'ai');
-        } else if (data.status === 'error') {
-          addMsg('<div class="error-box">❌ ' + esc(data.message || '알 수 없는 오류') + '</div>', 'ai');
-        } else {
-          addMsg('<div class="error-box">❌ 예상치 못한 응답</div>', 'ai');
-        }
-
-        sendBtn.disabled = false;
-        msgInput.focus();
-      });
+      fetch(url)
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          hideTyping(typingId);
+          if (data.status === 'success') {
+            addMsg(formatResponse(data), 'ai');
+          } else {
+            addMsg('<div class="error-box">❌ ' + esc(data.message || '알 수 없는 오류') + '</div>', 'ai');
+          }
+        })
+        .catch(function(err) {
+          hideTyping(typingId);
+          addMsg('<div class="error-box">❌ 연결 오류: ' + esc(err.message) + '</div>', 'ai');
+        })
+        .finally(function() {
+          sendBtn.disabled = false;
+          msgInput.focus();
+        });
     }
 
     function formatResponse(data) {
       var html = '';
-
-      if (data.response) {
-        html += md2html(data.response);
-      }
+      if (data.response) html += md2html(data.response);
 
       if (data.kmooc && data.kmooc.length > 0) {
         html += '<div style="margin-top:12px"><h3>📚 K-MOOC 추천 강좌</h3></div>';
-        for (var i = 0; i < data.kmooc.length; i++) {
-          var c = data.kmooc[i];
-          html += '<div class="course-card">';
-          html += '<h4>' + esc(c.name) + '</h4>';
-          html += '<p>👨‍🏫 ' + esc(c.professor) + ' &nbsp;|&nbsp; 🏫 ' + esc(c.org) + '</p>';
-          if (c.period && c.period !== ' ~ ') {
-            html += '<p>📅 ' + esc(c.period) + '</p>';
-          }
-          if (c.url) {
-            html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강좌 바로가기</a>';
-          }
+        data.kmooc.forEach(function(c) {
+          html += '<div class="course-card"><h4>' + esc(c.name) + '</h4><p>👨‍🏫 ' + esc(c.professor) + ' &nbsp;|&nbsp; 🏫 ' + esc(c.org) + '</p>';
+          if (c.period && c.period !== ' ~ ') html += '<p>📅 ' + esc(c.period) + '</p>';
+          if (c.url) html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강좌 바로가기</a>';
           html += '</div>';
-        }
+        });
       } else {
         html += '<div class="no-data">📚 관련 K-MOOC 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC</a>에서 직접 검색해보세요.</div>';
       }
 
       if (data.credit && data.credit.length > 0) {
         html += '<div style="margin-top:12px"><h3>🎓 학점은행제 과목</h3></div>';
-        for (var j = 0; j < data.credit.length; j++) {
-          var cr = data.credit[j];
-          html += '<div class="credit-card">';
-          html += '<h4>' + esc(cr.subject) + '</h4>';
-          html += '<p>🏢 ' + esc(cr.org) + '</p>';
-          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a>';
-          html += '</div>';
-        }
+        data.credit.forEach(function(c) {
+          html += '<div class="credit-card"><h4>' + esc(c.subject) + '</h4><p>🏢 ' + esc(c.org) + '</p><a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a></div>';
+        });
       }
-
       return html;
     }
 
     function md2html(text) {
       if (!text) return '';
-      return text
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/## (.*)/g, '<h3>$1</h3>')
-        .replace(/# (.*)/g, '<h2>$1</h2>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        .replace(/\n/g, '<br>');
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/## (.*)/g, '<h3>$1</h3>').replace(/# (.*)/g, '<h2>$1</h2>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\n/g, '<br>');
     }
 
-    function esc(str) {
-      if (!str) return '';
-      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+    function esc(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function addMsg(html, type) {
       var div = document.createElement('div');
@@ -472,39 +174,25 @@
     function showTyping() {
       var id = 't' + Date.now();
       var div = document.createElement('div');
-      div.className = 'msg ai';
-      div.id = id;
+      div.className = 'msg ai'; div.id = id;
       div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
-      msgBox.appendChild(div);
-      msgBox.scrollTop = msgBox.scrollHeight;
-      return id;
+      msgBox.appendChild(div); msgBox.scrollTop = msgBox.scrollHeight; return id;
     }
 
-    function hideTyping(id) {
-      var el = document.getElementById(id);
-      if (el) el.remove();
-    }
+    function hideTyping(id) { var el = document.getElementById(id); if (el) el.remove(); }
 
     function clearChat() {
       if (!confirm('대화 내용을 삭제할까요?')) return;
-
-      jsonpCall({ type: 'clear', sid: sid }, function() {
-        msgBox.innerHTML = '';
-        addMsg('대화가 초기화되었습니다! 😊', 'ai');
-      });
+      fetch(API_URL + '?type=clear&sid=' + encodeURIComponent(sid))
+        .then(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다! 😊', 'ai'); })
+        .catch(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다.', 'ai'); });
     }
 
-    // 연결 테스트 (JSONP)
     window.onload = function() {
-      jsonpCall({ type: 'handshake' }, function(err, data) {
-        if (err) {
-          console.error('❌ 연결 실패:', err);
-          addMsg('<div class="error-box">⚠️ 서버 연결 실패. Apps Script 배포 URL을 확인하세요.</div>', 'ai');
-        } else {
-          console.log('✅ 연결 성공:', data);
-          addMsg('✅ 서버에 연결되었습니다!', 'ai');
-        }
-      });
+      fetch(API_URL + '?type=handshake')
+        .then(function(r) { return r.json(); })
+        .then(function(d) { console.log('✅ 연결 성공:', d); })
+        .catch(function(e) { console.error('❌ 연결 실패:', e); addMsg('<div class="error-box">⚠️ 서버 연결 실패. Apps Script 배포 URL을 확인하세요.</div>', 'ai'); });
     };
   </script>
 </body>
