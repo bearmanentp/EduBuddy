@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>EduBuddy</title>
+  <title>EduBuddy - AI 진로·학습 도우미</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:Segoe UI,Malgun Gothic,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
+    body{font-family:'Segoe UI', 'Malgun Gothic', sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
     .container{max-width:980px;margin:0 auto;}
     header{text-align:center;color:#fff;margin-bottom:14px;}
     h1{font-size:2.1rem;margin-bottom:4px;}
     .subtitle{opacity:.9;font-size:1rem;}
+    .status{font-size:12px;margin-top:5px;opacity:.8;}
     .quick-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
-    .quick-btn{padding:7px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
+    .quick-btn{padding:7px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;backdrop-filter:blur(5px);}
     .quick-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-2px);}
     .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:640px;}
     .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
-    .clear-btn{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:12px;}
+    .clear-btn{background:rgba(255,255,255,.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:12px;transition:.2s;}
+    .clear-btn:hover{background:rgba(255,255,255,.35);}
     .messages{flex:1;padding:15px;overflow-y:auto;background:#f5f7fa;}
     .msg{margin-bottom:12px;display:flex;animation:fadeIn .25s ease;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
@@ -44,22 +46,29 @@
     .image-caption{padding:8px 12px;font-size:12px;color:#666;}
     .input-area{padding:12px 14px;background:#fff;border-top:1px solid #e0e0e0;display:flex;flex-direction:column;gap:10px;}
     .top-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-    .file-label{padding:7px 12px;border:1px dashed #667eea;border-radius:14px;color:#667eea;font-size:12px;cursor:pointer;background:#f0f4ff;}
+    .file-label{padding:7px 12px;border:1px dashed #667eea;border-radius:14px;color:#667eea;font-size:12px;cursor:pointer;background:#f0f4ff;transition:.2s;}
+    .file-label:hover{background:#e0e8ff;}
     #fileInput{display:none;}
-    #fileName{font-size:12px;color:#666;}
-    #imgToggle{padding:7px 12px;border:1px solid #ffc107;background:#fff3cd;border-radius:14px;cursor:pointer;font-size:12px;color:#856404;}
+    #fileName{font-size:12px;color:#666;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    #imgToggle{padding:7px 12px;border:1px solid #ffc107;background:#fff3cd;border-radius:14px;cursor:pointer;font-size:12px;color:#856404;transition:.2s;}
     #imgToggle.active{background:#ffc107;color:#fff;border-color:#ffc107;}
     .bottom-row{display:flex;gap:10px;align-items:center;}
-    #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;}
+    #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;transition:.2s;}
     #msgInput:focus{border-color:#667eea;}
-    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;}
-    #sendBtn:disabled{background:#ccc;cursor:wait;}
+    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;transition:.2s;}
+    #sendBtn:hover{opacity:.9;transform:translateY(-1px);}
+    #sendBtn:disabled{background:#ccc;cursor:wait;transform:none;}
     .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
     .typing span{width:7px;height:7px;background:#667eea;border-radius:50%;animation:bounce 1.2s infinite;}
     .typing span:nth-child(2){animation-delay:.2s;}
     .typing span:nth-child(3){animation-delay:.4s;}
     @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
-    @media(max-width:600px){.chat-box{height:560px;}.bubble{max-width:92%;font-size:13px;}}
+    @media(max-width:600px){
+      .chat-box{height:560px;}
+      .bubble{max-width:92%;font-size:13px;}
+      .quick-btns{gap:4px;}
+      .quick-btn{padding:6px 10px;font-size:12px;}
+    }
   </style>
 </head>
 <body>
@@ -67,6 +76,7 @@
     <header>
       <h1>🎓 EduBuddy</h1>
       <div class="subtitle">AI 진로·학습 맞춤 도우미</div>
+      <div class="status" id="status">연결 확인 중...</div>
     </header>
 
     <div class="quick-btns">
@@ -87,21 +97,23 @@
       <div class="messages" id="messages">
         <div class="msg ai">
           <div class="bubble">
-            안녕하세요! 👋
-            <br/>📝 세특 추천
-            <br/>📚 강의 추천 + 링크
-            <br/>🎓 학점은행제 추천
-            <br/>📎 TXT 첨부 가능
+            안녕하세요! 👋 저는 <strong>EduBuddy</strong>입니다.<br><br>
+            📝 <strong>세특 추천</strong> - 맞춤형 세부능력 특기사항<br>
+            📚 <strong>강의 추천</strong> - K-MOOC 강좌 + 바로가기 링크<br>
+            🎓 <strong>학점은행제</strong> - 관련 과목 추천<br>
+            📎 <strong>파일 첨부</strong> - TXT 파일 분석 가능<br>
+            🖼️ <strong>이미지</strong> - 관련 분야 이미지 제공<br><br>
+            무엇을 도와드릴까요? 😊
           </div>
         </div>
       </div>
 
       <div class="input-area">
         <div class="top-row">
-          <label class="file-label" for="fileInput">📎 파일 첨부(TXT)</label>
+          <label class="file-label" for="fileInput">📎 파일 첨부 (TXT)</label>
           <input type="file" id="fileInput" accept=".txt" />
           <div id="fileName">선택된 파일 없음</div>
-          <button id="imgToggle" onclick="toggleImg()">🖼️ 이미지 프롬프트: OFF</button>
+          <button id="imgToggle" onclick="toggleImg()">🖼️ 이미지: OFF</button>
         </div>
         <div class="bottom-row">
           <input id="msgInput" type="text" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()" />
@@ -112,75 +124,111 @@
   </div>
 
   <script>
-    // ✅ 본인 Apps Script 웹앱 URL로 교체
-    var API_URL = "https://script.google.com/macros/s/AKfycbzuB4xDirq5t7ez0HCyzM8C5z0vXMX2yycMuuEmMKddL9OyQRdekmMEyvCkoWobyJOb/exec";
+    // ✅ 본인 Apps Script 웹앱 URL로 교체하세요!
+    var API_URL = "https://script.google.com/macros/s/AKfycbwK127TXwl7GbNVNee0Vh94IWXKdP3e61TIK6bIuCgEztohKE5J2rnm2Rg6Ui3NUoFx/exec";
 
+    // 세션 ID 관리
     var sid = localStorage.getItem("edubuddy_sid");
     if (!sid) {
       sid = "s" + Date.now() + Math.random().toString(36).substr(2, 8);
       localStorage.setItem("edubuddy_sid", sid);
     }
 
+    // DOM 요소
     var msgBox = document.getElementById("messages");
     var msgInput = document.getElementById("msgInput");
     var sendBtn = document.getElementById("sendBtn");
     var fileInput = document.getElementById("fileInput");
     var fileNameEl = document.getElementById("fileName");
     var imgToggleBtn = document.getElementById("imgToggle");
+    var statusEl = document.getElementById("status");
 
+    // 상태 변수
     var needImage = false;
     var currentFileText = "";
     var currentFileName = "";
 
     // =============================================
-    // API 요청 (fetch 단일 방식)
+    // API 요청 (POST 방식)
     // =============================================
     function apiRequest(params, timeoutMs) {
       timeoutMs = timeoutMs || 120000;
+      
+      // AbortController로 타임아웃 설정
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function() {
+        controller.abort();
+      }, timeoutMs);
 
-      var query = Object.keys(params).map(function(k) {
-        return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
-      }).join("&");
-
-      var url = API_URL + "?" + query;
-
-      return fetch(url, {
-        method: "GET",
+      return fetch(API_URL, {
+        method: "POST",
         mode: "cors",
-        redirect: "follow"
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: Object.keys(params).map(function(k) {
+          return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
+        }).join("&"),
+        signal: controller.signal
       }).then(function(resp) {
+        clearTimeout(timeoutId);
         if (!resp.ok) throw new Error("HTTP " + resp.status);
         return resp.json();
+      }).catch(function(err) {
+        clearTimeout(timeoutId);
+        throw err;
       });
     }
 
     // =============================================
-    // 파일 첨부
+    // 파일 첨부 처리
     // =============================================
     fileInput.addEventListener("change", function(ev) {
       var f = ev.target.files && ev.target.files[0];
-      if (!f) return;
+      if (!f) {
+        currentFileText = "";
+        currentFileName = "";
+        fileNameEl.textContent = "선택된 파일 없음";
+        return;
+      }
+
       currentFileName = f.name;
       fileNameEl.textContent = "📄 " + f.name;
+
+      if (!f.name.toLowerCase().endsWith('.txt')) {
+        currentFileText = "";
+        fileNameEl.textContent = "⚠️ TXT 파일만 가능";
+        return;
+      }
+
       var reader = new FileReader();
-      reader.onload = function() { currentFileText = String(reader.result || "").slice(0, 500); };
-      reader.onerror = function() { currentFileText = ""; fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)"; };
+      reader.onload = function() {
+        currentFileText = String(reader.result || "").slice(0, 800);
+        fileNameEl.textContent = "📄 " + f.name + " (" + (currentFileText.length) + "자)";
+      };
+      reader.onerror = function() {
+        currentFileText = "";
+        currentFileName = "";
+        fileNameEl.textContent = "📄 " + f.name + " (읽기 실패)";
+      };
       reader.readAsText(f);
     });
 
+    // 이미지 토글
     function toggleImg() {
       needImage = !needImage;
-      imgToggleBtn.textContent = "🖼️ 이미지 프롬프트: " + (needImage ? "ON" : "OFF");
+      imgToggleBtn.textContent = "🖼️ 이미지: " + (needImage ? "ON" : "OFF");
       imgToggleBtn.classList.toggle("active", needImage);
     }
 
+    // 빠른 질문
     function ask(text) {
       msgInput.value = text;
       sendMsg();
     }
 
     // =============================================
-    // UI 함수
+    // UI 헬퍼 함수
     // =============================================
     function showTyping() {
       var id = "t" + Date.now();
@@ -192,23 +240,33 @@
       msgBox.scrollTop = msgBox.scrollHeight;
       return id;
     }
+
     function hideTyping(id) {
       var el = document.getElementById(id);
       if (el) el.remove();
     }
+
     function esc(str) {
-      return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
+
     function md2html(text) {
       if (!text) return "";
       return String(text)
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
         .replace(/^### (.*)$/gm, "<h3>$1</h3>")
         .replace(/^## (.*)$/gm, "<h3>$1</h3>")
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
         .replace(/\n/g, "<br/>");
     }
+
     function addMsg(html, type) {
       var div = document.createElement("div");
       div.className = "msg " + type;
@@ -219,31 +277,45 @@
 
     function formatResponse(data) {
       var html = "";
-      if (data.imageUrl) {
-        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.career_field || "") + ' 관련</div></div>';
-      }
-      html += md2html(data.response || "응답 없음");
 
+      // 이미지 표시
+      if (data.imageUrl) {
+        html += '<div class="image-box"><img src="' + esc(data.imageUrl) + 
+                '" alt="" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + 
+                esc(data.analysis && data.analysis.career_field || "") + ' 관련</div></div>';
+      }
+
+      // 메인 응답
+      html += md2html(data.response || "응답을 생성하지 못했습니다.");
+
+      // K-MOOC 강좌
       if (data.kmooc && data.kmooc.length > 0) {
         html += '<div style="margin-top:14px"><h3>📚 추천 K-MOOC 강좌</h3></div>';
         data.kmooc.forEach(function(c) {
-          html += '<div class="course-card"><h4>' + esc(c.name) + '</h4>';
+          html += '<div class="course-card">';
+          html += '<h4>' + esc(c.name) + '</h4>';
           html += '<div class="meta">👨‍🏫 ' + esc(c.professor) + ' | 🏫 ' + esc(c.org) + '</div>';
           if (c.period) html += '<div class="meta">📅 ' + esc(c.period) + '</div>';
-          html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank">🔗 바로가기</a></div>';
+          html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강의 바로가기</a>';
+          html += '</div>';
         });
       } else {
-        html += '<div class="no-data" style="margin-top:12px">📚 K-MOOC 추천 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC 검색</a></div>';
+        html += '<div class="no-data" style="margin-top:12px">📚 K-MOOC 추천 강좌를 찾지 못했습니다. ';
+        html += '<a href="https://www.kmooc.kr" target="_blank" rel="noopener">K-MOOC에서 직접 검색</a></div>';
       }
 
+      // 학점은행제
       if (data.credit && data.credit.length > 0) {
         html += '<div style="margin-top:14px"><h3>🎓 학점은행제 추천 과목</h3></div>';
         data.credit.forEach(function(c) {
-          html += '<div class="credit-card"><h4>' + esc(c.subject) + '</h4>';
-          html += '<div class="meta">🏢 ' + esc(c.organization || c.org) + '</div>';
-          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank">🔗 검색</a></div>';
+          html += '<div class="credit-card">';
+          html += '<h4>' + esc(c.subject) + '</h4>';
+          html += '<div class="meta">🏢 ' + esc(c.organization) + '</div>';
+          html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a>';
+          html += '</div>';
         });
       }
+
       return html;
     }
 
@@ -252,71 +324,120 @@
     // =============================================
     function sendMsg() {
       var text = msgInput.value.trim();
-      if (!text && !currentFileText) return;
+      if (!text && !currentFileText) {
+        msgInput.placeholder = "메시지를 입력해주세요!";
+        return;
+      }
 
-      addMsg(esc(text || "(파일만 첨부)"), "user");
+      // 사용자 메시지 표시
+      var displayText = text || "(파일만 첨부)";
+      if (currentFileName && !text) {
+        displayText = "📄 " + currentFileName + " 파일 분석 요청";
+      }
+      addMsg(esc(displayText), "user");
+
+      // 입력창 초기화
       msgInput.value = "";
+      msgInput.placeholder = "궁금한 것을 입력하세요...";
       sendBtn.disabled = true;
 
+      // 타이핑 표시
       var typingId = showTyping();
 
+      // API 요청
       apiRequest({
         type: "chat",
         message: text.slice(0, 700),
         sid: sid,
-        file: String(currentFileText || "").slice(0, 500),
+        file: String(currentFileText || "").slice(0, 800),
         fname: String(currentFileName || "").slice(0, 100),
         img: needImage ? "true" : "false"
       }, 120000)
         .then(function(data) {
           hideTyping(typingId);
-          if (data.status === "success") {
+          if (data.status === "success" && data.data) {
             addMsg(formatResponse(data.data), "ai");
           } else {
-            addMsg('<div class="error-box">❌ ' + esc(data.message || "알 수 없는 오류") + '</div>', "ai");
+            addMsg('<div class="error-box">❌ ' + esc(data.message || "알 수 없는 오류가 발생했습니다.") + '</div>', "ai");
           }
         })
         .catch(function(err) {
           hideTyping(typingId);
-          addMsg('<div class="error-box">❌ 통신 오류: ' + esc(err.message) + '</div>', "ai");
+          var errorMsg = "통신 오류가 발생했습니다.";
+          if (err.name === "AbortError") {
+            errorMsg = "요청 시간이 초과되었습니다. 다시 시도해주세요.";
+          } else if (err.message) {
+            errorMsg = "오류: " + err.message;
+          }
+          addMsg('<div class="error-box">❌ ' + esc(errorMsg) + '</div>', "ai");
+          console.error("API 요청 오류:", err);
         })
         .finally(function() {
+          // 상태 초기화
           sendBtn.disabled = false;
           currentFileText = "";
           currentFileName = "";
           fileInput.value = "";
           fileNameEl.textContent = "선택된 파일 없음";
           needImage = false;
-          imgToggleBtn.textContent = "🖼️ 이미지 프롬프트: OFF";
+          imgToggleBtn.textContent = "🖼️ 이미지: OFF";
           imgToggleBtn.classList.remove("active");
           msgInput.focus();
         });
     }
 
+    // 대화 초기화
     function clearChat() {
+      if (!confirm("대화 내용을 모두 초기화하시겠습니까?")) return;
+
       apiRequest({ type: "clear", sid: sid }, 20000)
-        .then(function() {
+        .then(function(data) {
           msgBox.innerHTML = "";
-          addMsg("대화가 초기화되었습니다! 😊", "ai");
+          if (data.status === "success") {
+            addMsg("대화가 초기화되었습니다! 😊 새로운 대화를 시작해보세요.", "ai");
+          }
         })
-        .catch(function() {
+        .catch(function(err) {
           msgBox.innerHTML = "";
-          addMsg("초기화 오류 발생", "ai");
+          addMsg("초기화 중 오류가 발생했습니다. 페이지를 새로고침해주세요.", "ai");
+          console.error("초기화 오류:", err);
         });
     }
 
     // =============================================
-    // 시작 시 연결 테스트
+    // 시작 시 연결 확인
     // =============================================
     window.onload = function() {
-      apiRequest({ type: "handshake" }, 20000)
+      statusEl.textContent = "서버 연결 확인 중...";
+
+      apiRequest({ type: "handshake" }, 15000)
         .then(function(d) {
-          console.log("✅ 연결 성공:", d);
+          if (d.status === "online") {
+            statusEl.textContent = "✅ 연결 성공 | " + new Date().toLocaleTimeString();
+            statusEl.style.color = "#a0ffa0";
+            console.log("✅ EduBuddy 서버 연결 성공:", d);
+          } else {
+            statusEl.textContent = "⚠️ 서버 응답 이상";
+            statusEl.style.color = "#ffcc00";
+          }
         })
         .catch(function(e) {
-          console.error("❌ 연결 실패:", e);
-          addMsg('<div class="error-box">⚠️ 서버 연결 실패<br/>' + esc(e.message) + '</div>', "ai");
+          statusEl.textContent = "❌ 서버 연결 실패 - 설정을 확인해주세요";
+          statusEl.style.color = "#ff8888";
+          console.error("❌ EduBuddy 서버 연결 실패:", e);
+          
+          // 연결 실패 안내
+          addMsg('<div class="error-box">⚠️ <strong>서버 연결 실패</strong><br>' +
+                 '1. Apps Script가 배포되었는지 확인<br>' +
+                 '2. API_URL이 올바른지 확인<br>' +
+                 '3. 스크립트 속성에 API 키가 설정되었는지 확인<br>' +
+                 '<small>오류: ' + esc(e.message) + '</small></div>', "ai");
         });
+    };
+
+    // 페이지 언로드 시 세션 유지
+    window.onbeforeunload = function() {
+      // 세션 ID는 localStorage에 저장되어 있으므로 유지됨
     };
   </script>
 </body>
