@@ -23,10 +23,17 @@
             background-size: 200% auto;
             transition: all 0.4s ease;
         }
-        .glow-action-btn:hover {
+        .glow-action-btn:hover:not(:disabled) {
             background-position: right center;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+        .glow-action-btn:disabled {
+            background: #334155;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none !important;
+            box-shadow: none !important;
         }
     </style>
 </head>
@@ -63,7 +70,7 @@
                     class="w-full bg-slate-950/60 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-slate-600 transition-all"
                     placeholder="예시) 정보 교과 시간에 자료구조와 파이썬 알고리즘을 배웠어. 이를 웹 OS 시뮬레이터 프로젝트 대시보드 설계와 연계해서 깊게 확장하고 싶어."></textarea>
                 
-                <button onclick="generateDashboard()" class="glow-action-btn w-full mt-4 text-sm font-black text-white py-3.5 px-4 rounded-xl cursor-pointer tracking-wider">
+                <button id="submitBtn" onclick="generateDashboard()" class="glow-action-btn w-full mt-4 text-sm font-black text-white py-3.5 px-4 rounded-xl cursor-pointer tracking-wider">
                     오픈 API 통합 데이터 로드 및 AI 맞춤 분석 시작
                 </button>
             </div>
@@ -118,18 +125,20 @@
     </div>
 
     <script>
-        // 💡 [여기가 네가 찾던 칸!] 여기에 배포한 구글 앱스크립트 웹앱 URL 주소를 통째로 넣어줘!
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxBK2o6gMi5NMKzJiBNL_SkdCNgtjEJd5gJIwQ_GjpwLMzZpC1AWovhxCx7C_4Ox7-Q/exec";
+        // 💡 [웹앱 URL 입력 칸] 배포한 구글 앱스크립트 웹앱 URL 주소를 여기에 넣어줘!
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzxRwSQJBFX67_LoUnwVYbWWBgtyLoYNF8EhJBujbPwHFfJfIs-1jFfBleRYBzaXGJp/exec";
 
         function generateDashboard() {
             const userInput = document.getElementById('userInput').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+
             if(!userInput) {
                 alert('탐구하고자 하는 교과 세부 내용이나 키워드를 입력해 주세요.');
                 return;
             }
 
             if(WEB_APP_URL === "구글_앱스크립트_웹앱_URL_넣는_칸" || !WEB_APP_URL.startsWith("https")) {
-                alert("HTML 코드 상단의 WEB_APP_URL 변수에 실제 앱스크립트 웹앱 주소를 입력해 주셔야 연동됩니다!");
+                alert("HTML 코드 상단의 WEB_APP_URL 변수에 실제 앱스크립트 웹앱 주소를 입력해야 연동됩니다!");
                 return;
             }
 
@@ -137,14 +146,16 @@
             const dashboard = document.getElementById('dashboard');
             const errorPanel = document.getElementById('errorPanel');
             
+            // UI 상태 변경 및 버튼 비활성화 (중복 스트림 방지)
             loading.classList.remove('hidden');
             dashboard.classList.add('hidden');
             errorPanel.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "데이터 요청 및 AI 분석 중...";
 
-            // 외부 통신용 표준 표준 fetch API 비동기 엔드포인트 바인딩
             fetch(WEB_APP_URL, {
                 method: "POST",
-                contentType: "text/plain", // GAS doPost 규격 스펙 맞춤용
+                contentType: "text/plain", 
                 body: JSON.stringify({
                     action: 'searchAndRecommend',
                     userInput: userInput
@@ -153,6 +164,9 @@
             .then(res => res.json())
             .then(responseObj => {
                 loading.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerText = "오픈 API 통합 데이터 로드 및 AI 맞춤 분석 시작";
+
                 if(responseObj.success) {
                     displayData(responseObj.data);
                 } else {
@@ -162,7 +176,10 @@
             })
             .catch(err => {
                 loading.classList.add('hidden');
-                document.getElementById('errorMsg').innerText = "앱스크립트 엔드포인트 통신 실패 (CORS 또는 URL 설정을 확인하세요)";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "오픈 API 통합 데이터 로드 및 AI 맞춤 분석 시작";
+                
+                document.getElementById('errorMsg').innerText = "앱스크립트 엔드포인트 통신 실패 (디코딩된 서비스키 검증 또는 배포 설정을 확인하세요)";
                 errorPanel.classList.remove('hidden');
                 console.error(err);
             });
