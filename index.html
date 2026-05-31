@@ -15,35 +15,37 @@
     .quick-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
     .quick-btn{padding:7px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
     .quick-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-2px);}
-    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:640px;}
+    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:680px;}
     .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
     .messages{flex:1;padding:15px;overflow-y:auto;background:#f5f7fa;}
     .msg{margin-bottom:12px;display:flex;animation:fadeIn .25s ease;}
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
     .msg.user{justify-content:flex-end;}
     .msg.ai{justify-content:flex-start;}
-    .bubble{max-width:85%;padding:12px 16px;border-radius:16px;line-height:1.7;word-break:break-word;font-size:14px;}
+    .bubble{max-width:88%;padding:14px 18px;border-radius:16px;line-height:1.75;word-break:break-word;font-size:14px;}
     .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:4px;}
     .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,.08);border-bottom-left-radius:4px;}
-    .bubble h2,.bubble h3{color:#667eea;margin:12px 0 6px;font-size:1rem;}
+    .bubble h2,.bubble h3{color:#667eea;margin:14px 0 8px;font-size:1rem;border-bottom:1px solid #e8eeff;padding-bottom:4px;}
     .bubble strong{color:#764ba2;}
     .bubble a{color:#5568d3;text-decoration:none;}
     .bubble a:hover{text-decoration:underline;}
-    .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:4px solid #667eea;padding:10px 12px;margin:7px 0;border-radius:8px;}
-    .course-card h4{color:#667eea;font-size:.92rem;margin-bottom:3px;}
-    .course-card .meta{color:#555;font-size:.82rem;margin:2px 0;}
-    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff!important;padding:6px 10px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;}
-    .credit-card{background:#f0fff4;border-left:4px solid #34a853;padding:10px 12px;margin:7px 0;border-radius:8px;}
-    .credit-card h4{color:#34a853;font-size:.92rem;margin-bottom:3px;}
-    .credit-card .meta{color:#555;font-size:.82rem;margin:2px 0;}
-    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff!important;padding:6px 10px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;}
+    .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:4px solid #667eea;padding:12px 14px;margin:8px 0;border-radius:8px;}
+    .course-card h4{color:#667eea;font-size:.93rem;margin-bottom:4px;}
+    .course-card .meta{color:#555;font-size:.83rem;margin:3px 0;}
+    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff!important;padding:7px 12px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;transition:.2s;}
+    .course-link:hover{opacity:.85;}
+    .credit-card{background:#f0fff4;border-left:4px solid #34a853;padding:12px 14px;margin:8px 0;border-radius:8px;}
+    .credit-card h4{color:#34a853;font-size:.93rem;margin-bottom:4px;}
+    .credit-card .meta{color:#555;font-size:.83rem;margin:3px 0;}
+    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff!important;padding:7px 12px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;transition:.2s;}
+    .credit-link:hover{opacity:.85;}
     .notice-box{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;font-size:.88rem;}
     .error-box{background:#f8d7da;border-left:4px solid #dc3545;padding:10px 12px;margin:8px 0;border-radius:8px;color:#721c24;}
     .info-box{background:#e8f4fd;border-left:4px solid #0d6efd;padding:10px 12px;margin:8px 0;border-radius:8px;color:#084298;font-size:.88rem;}
     .input-area{padding:12px 14px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:10px;align-items:center;}
     #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;}
     #msgInput:focus{border-color:#667eea;}
-    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;}
+    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;transition:.2s;}
     #sendBtn:hover{opacity:.9;}
     #sendBtn:disabled{background:#ccc;cursor:wait;}
     .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
@@ -51,7 +53,7 @@
     .typing span:nth-child(2){animation-delay:.2s;}
     .typing span:nth-child(3){animation-delay:.4s;}
     @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
-    @media(max-width:600px){.chat-box{height:560px;}.bubble{max-width:92%;font-size:13px;}.quick-btn{padding:6px 10px;font-size:12px;}}
+    @media(max-width:600px){.chat-box{height:580px;}.bubble{max-width:94%;font-size:13px;}.quick-btn{padding:6px 10px;font-size:12px;}}
   </style>
 </head>
 <body>
@@ -67,8 +69,10 @@
       <button class="quick-btn" onclick="ask('프로그래머가 되고 싶어요. 세특 추천해주세요.')">💻 개발</button>
       <button class="quick-btn" onclick="ask('심리학 세특 어떻게 써야 할까요?')">🧠 심리학</button>
       <button class="quick-btn" onclick="ask('데이터 분석가가 되려면 뭘 배워야 해요?')">📈 데이터</button>
-      <button class="quick-btn" onclick="ask('경제학 관련 강의 추천해주세요.')">📊 경제학</button>
-      <button class="quick-btn" onclick="ask('디자인 진로 상담해주세요.')">🎨 디자인</button>
+      <button class="quick-btn" onclick="ask('경제학 관련 세특 써주세요.')">📊 경제학</button>
+      <button class="quick-btn" onclick="ask('디자인 분야 진로 상담 + 세특 부탁해요.')">🎨 디자인</button>
+      <button class="quick-btn" onclick="ask('간호사가 되고 싶은데 어떻게 준비해야 해요?')">🏥 간호</button>
+      <button class="quick-btn" onclick="ask('법학과 가고 싶어요. 세특 써주세요.')">⚖️ 법학</button>
     </div>
 
     <div class="chat-box">
@@ -80,12 +84,13 @@
         <div class="msg ai">
           <div class="bubble">
             안녕하세요! 👋 <strong>EduBuddy Pro</strong>입니다.<br><br>
-            🎯 <strong>진로 상담</strong>: 관심 분야 맞춤 진로 안내<br>
-            📝 <strong>세특 작성</strong>: 교과별 세부능력특기사항 초안<br>
-            📚 <strong>K-MOOC 강의</strong>: 실제 강좌 검색 + 상세 링크<br>
-            🏫 <strong>교과 연계</strong>: 수업과 연결하는 탐구 주제<br>
-            🎓 <strong>학점은행제</strong>: 졸업 후 활용 과목 안내<br><br>
-            궁금한 내용을 입력해 주세요 😊
+            🎯 <strong>진로 로드맵</strong>: 관심 분야 맞춤 진로·학과·역량 안내<br>
+            📝 <strong>세특 초안 작성</strong>: 교과목별 완성도 높은 세특 문장 생성<br>
+            📚 <strong>K-MOOC 강의</strong>: 실제 강좌 검색 + 상세 페이지 링크<br>
+            🏫 <strong>교과 연계 탐구</strong>: 수업과 연결하는 구체적 활동 아이디어<br>
+            🎓 <strong>학점은행제</strong>: 졸업 후 활용 가능한 과목 안내<br>
+            💡 <strong>행동 계획</strong>: 이번 주/달/학기 단계별 실천 방안<br><br>
+            무엇이 궁금하신가요? 😊
           </div>
         </div>
       </div>
@@ -99,7 +104,7 @@
 
   <script>
     // ★★★ 본인 Apps Script 웹앱 URL 로 교체하세요 ★★★
-    var API_URL = "https://script.google.com/macros/s/AKfycbywGgLcs65t10vepXhtexUbdwQqnHpS940b9YsJR2K2FUEUgBD0Aj2jtxYdve7Nc1k5/exec";
+    var API_URL = "https://script.google.com/macros/s/AKfycbzy1tqE3JDDC2letISZr5bFIXzmAODcGp5p3YagLQ7njXyMLmT-g9chabGStuP9LBAH/exec";
 
     var msgBox   = document.getElementById("messages");
     var msgInput = document.getElementById("msgInput");
@@ -211,7 +216,7 @@
 
       // K-MOOC 카드
       if (data.kmooc && data.kmooc.length > 0) {
-        html += '<div style="margin-top:14px"><h3>📚 K-MOOC 추천 강의</h3></div>';
+        html += '<div style="margin-top:16px"><h3>📚 K-MOOC 검색 결과</h3></div>';
         data.kmooc.forEach(function(c) {
           html += '<div class="course-card">';
           html += '<h4>' + esc(c.name) + '</h4>';
@@ -221,16 +226,16 @@
           html += '</div>';
         });
       } else {
-        html += '<div class="info-box" style="margin-top:12px">';
+        html += '<div class="info-box" style="margin-top:14px">';
         html += '📚 K-MOOC에서 관련 강좌를 찾지 못했습니다. ';
-        html += '<a href="https://www.kmooc.kr" target="_blank" rel="noopener">K-MOOC에서 직접 검색하기 →</a>';
+        html += '<a href="https://www.kmooc.kr" target="_blank" rel="noopener"><strong>K-MOOC에서 직접 검색하기 →</strong></a>';
         html += '</div>';
       }
 
       // 학점은행제 카드
       if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
-        html += '<div class="notice-box">⚠️ 학점은행제는 <strong>고등학교 졸업자 이상</strong>만 학점 인정이 가능합니다. 졸업 후 대학 진학·편입·학위 취득 시 참고하세요.</div>';
+        html += '<div style="margin-top:16px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
+        html += '<div class="notice-box">⚠️ 학점은행제는 <strong>고등학교 졸업자 이상</strong>만 학점 인정이 가능합니다.<br>졸업 후 대학 편입·학위 취득·자격증 준비 시 참고하세요.</div>';
         data.credit.forEach(function(c) {
           html += '<div class="credit-card">';
           html += '<h4>' + esc(c.subject) + '</h4>';
@@ -239,9 +244,9 @@
           html += '</div>';
         });
       } else {
-        html += '<div class="info-box" style="margin-top:12px">';
+        html += '<div class="info-box" style="margin-top:14px">';
         html += '🎓 학점은행제 관련 과목을 찾지 못했습니다. ';
-        html += '<a href="https://www.cbinfo.or.kr" target="_blank" rel="noopener">학점은행제 공시정보에서 직접 검색하기 →</a>';
+        html += '<a href="https://www.cbinfo.or.kr" target="_blank" rel="noopener"><strong>학점은행제 공시정보에서 직접 검색 →</strong></a>';
         html += '<br><small>※ 학점은행제는 고등학교 졸업 후 활용 가능합니다.</small>';
         html += '</div>';
       }
