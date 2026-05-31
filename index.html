@@ -2,66 +2,100 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>EduBuddy Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>EduBuddy</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Segoe UI','Malgun Gothic',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:15px;}
+    body{font-family:'Segoe UI','Malgun Gothic',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:10px;}
     .container{max-width:980px;margin:0 auto;}
-    header{text-align:center;color:#fff;margin-bottom:14px;}
-    h1{font-size:2.1rem;margin-bottom:4px;}
-    .subtitle{opacity:.9;font-size:1rem;}
-    .status{margin-top:6px;font-size:12px;opacity:.9;}
-    .quick-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
-    .quick-btn{padding:7px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
-    .quick-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-2px);}
-    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:680px;}
-    .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
-    .messages{flex:1;padding:15px;overflow-y:auto;background:#f5f7fa;}
-    .msg{margin-bottom:12px;display:flex;animation:fadeIn .25s ease;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+    header{text-align:center;color:#fff;margin-bottom:12px;}
+    h1{font-size:1.8rem;margin-bottom:3px;}
+    .subtitle{opacity:.9;font-size:0.9rem;}
+    .dev-info{font-size:0.75rem;opacity:0.85;margin-top:4px;}
+    .status{margin-top:5px;font-size:11px;opacity:.9;}
+    .quick-btns{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+    .quick-btn{padding:6px 10px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:16px;cursor:pointer;font-size:12px;transition:.2s;}
+    .quick-btn:hover{background:rgba(255,255,255,.35);transform:translateY(-1px);}
+    .chat-box{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 160px);min-height:400px;}
+    .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+    .chat-header span{font-size:0.95rem;font-weight:600;}
+    .messages{flex:1;padding:12px;overflow-y:auto;background:#f5f7fa;-webkit-overflow-scrolling:touch;}
+    .msg{margin-bottom:10px;display:flex;animation:fadeIn .25s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
     .msg.user{justify-content:flex-end;}
     .msg.ai{justify-content:flex-start;}
-    .bubble{max-width:88%;padding:14px 18px;border-radius:16px;line-height:1.75;word-break:break-word;font-size:14px;}
-    .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:4px;}
-    .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,.08);border-bottom-left-radius:4px;}
-    .bubble h2,.bubble h3{color:#667eea;margin:14px 0 8px;font-size:1rem;border-bottom:1px solid #e8eeff;padding-bottom:4px;}
+    .bubble{max-width:88%;padding:11px 14px;border-radius:14px;line-height:1.7;word-break:break-word;font-size:13px;}
+    .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:3px;}
+    .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 1px 4px rgba(0,0,0,.08);border-bottom-left-radius:3px;}
+    .bubble h2,.bubble h3{color:#667eea;margin:11px 0 6px;font-size:0.95rem;border-bottom:1px solid #e8eeff;padding-bottom:3px;}
     .bubble strong{color:#764ba2;}
     .bubble a{color:#5568d3;text-decoration:none;}
     .bubble a:hover{text-decoration:underline;}
-    .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:4px solid #667eea;padding:12px 14px;margin:8px 0;border-radius:8px;}
-    .course-card h4{color:#667eea;font-size:.93rem;margin-bottom:4px;}
-    .course-card .meta{color:#555;font-size:.83rem;margin:3px 0;}
-    .course-card .summary{color:#666;font-size:.85rem;margin:6px 0;padding:8px;background:rgba(255,255,255,.6);border-radius:6px;font-style:italic;}
-    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff!important;padding:7px 12px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;transition:.2s;}
+    .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:3px solid #667eea;padding:9px 11px;margin:6px 0;border-radius:6px;}
+    .course-card h4{color:#667eea;font-size:0.88rem;margin-bottom:3px;}
+    .course-card .meta{color:#555;font-size:0.78rem;margin:2px 0;}
+    .course-link{display:inline-block;margin-top:5px;background:#667eea;color:#fff!important;padding:5px 9px;border-radius:5px;text-decoration:none!important;font-size:0.8rem;font-weight:bold;transition:.2s;}
     .course-link:hover{opacity:.85;}
-    .credit-card{background:#f0fff4;border-left:4px solid #34a853;padding:12px 14px;margin:8px 0;border-radius:8px;}
-    .credit-card h4{color:#34a853;font-size:.93rem;margin-bottom:4px;}
-    .credit-card .meta{color:#555;font-size:.83rem;margin:3px 0;}
-    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff!important;padding:7px 12px;border-radius:6px;text-decoration:none!important;font-size:.85rem;font-weight:bold;transition:.2s;}
+    .credit-card{background:#f0fff4;border-left:3px solid #34a853;padding:9px 11px;margin:6px 0;border-radius:6px;}
+    .credit-card h4{color:#34a853;font-size:0.88rem;margin-bottom:3px;}
+    .credit-card .meta{color:#555;font-size:0.78rem;margin:2px 0;}
+    .credit-link{display:inline-block;margin-top:5px;background:#34a853;color:#fff!important;padding:5px 9px;border-radius:5px;text-decoration:none!important;font-size:0.8rem;font-weight:bold;transition:.2s;}
     .credit-link:hover{opacity:.85;}
-    .notice-box{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;font-size:.88rem;}
-    .error-box{background:#f8d7da;border-left:4px solid #dc3545;padding:10px 12px;margin:8px 0;border-radius:8px;color:#721c24;}
-    .info-box{background:#e8f4fd;border-left:4px solid #0d6efd;padding:10px 12px;margin:8px 0;border-radius:8px;color:#084298;font-size:.88rem;}
-    .input-area{padding:12px 14px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:10px;align-items:center;}
-    #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;}
+    .notice-box{background:#fff3cd;border-left:3px solid #ffc107;padding:8px 10px;margin:6px 0;border-radius:6px;color:#856404;font-size:0.83rem;}
+    .error-box{background:#f8d7da;border-left:3px solid #dc3545;padding:8px 10px;margin:6px 0;border-radius:6px;color:#721c24;font-size:0.83rem;}
+    .info-box{background:#e8f4fd;border-left:3px solid #0d6efd;padding:8px 10px;margin:6px 0;border-radius:6px;color:#084298;font-size:0.83rem;}
+    .input-area{padding:10px 12px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:8px;align-items:center;}
+    #msgInput{flex:1;padding:9px 12px;border:2px solid #e0e0e0;border-radius:20px;font-size:13px;outline:none;-webkit-tap-highlight-color:transparent;}
     #msgInput:focus{border-color:#667eea;}
-    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;transition:.2s;}
+    #sendBtn{padding:9px 18px;border:none;border-radius:20px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:13px;font-weight:bold;cursor:pointer;transition:.2s;white-space:nowrap;}
     #sendBtn:hover{opacity:.9;}
     #sendBtn:disabled{background:#ccc;cursor:wait;}
-    .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
-    .typing span{width:7px;height:7px;background:#667eea;border-radius:50%;animation:bounce 1.2s infinite;}
+    .typing{display:inline-flex;gap:3px;padding:10px 14px;background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+    .typing span{width:6px;height:6px;background:#667eea;border-radius:50%;animation:bounce 1.2s infinite;}
     .typing span:nth-child(2){animation-delay:.2s;}
     .typing span:nth-child(3){animation-delay:.4s;}
-    @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
-    @media(max-width:600px){.chat-box{height:580px;}.bubble{max-width:94%;font-size:13px;}.quick-btn{padding:6px 10px;font-size:12px;}}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+    
+    /* 모바일 최적화 */
+    @media(max-width:480px){
+      body{padding:8px;}
+      h1{font-size:1.5rem;}
+      .subtitle{font-size:0.8rem;}
+      .dev-info{font-size:0.65rem;}
+      .quick-btns{gap:4px;}
+      .quick-btn{padding:5px 8px;font-size:11px;border-radius:14px;}
+      .chat-box{height:calc(100vh - 140px);border-radius:14px;}
+      .chat-header{padding:9px 12px;}
+      .chat-header span{font-size:0.9rem;}
+      .messages{padding:10px;}
+      .bubble{max-width:92%;padding:10px 12px;font-size:12.5px;border-radius:12px;}
+      .bubble h2,.bubble h3{font-size:0.9rem;margin:9px 0 5px;}
+      .course-card,.credit-card{padding:8px 10px;margin:5px 0;}
+      .course-card h4,.credit-card h4{font-size:0.83rem;}
+      .course-card .meta,.credit-card .meta{font-size:0.73rem;}
+      .course-link,.credit-link{padding:4px 8px;font-size:0.75rem;}
+      .notice-box,.error-box,.info-box{padding:7px 9px;font-size:0.78rem;}
+      .input-area{padding:9px 10px;gap:6px;}
+      #msgInput{padding:8px 11px;font-size:12.5px;border-radius:18px;}
+      #sendBtn{padding:8px 15px;font-size:12.5px;border-radius:18px;}
+      .typing{padding:9px 12px;}
+      .typing span{width:5px;height:5px;}
+    }
+    
+    @media(max-width:360px){
+      h1{font-size:1.3rem;}
+      .bubble{font-size:12px;}
+      #msgInput{font-size:12px;}
+      #sendBtn{font-size:12px;padding:8px 12px;}
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎓 EduBuddy Pro</h1>
+      <h1>🎓 EduBuddy</h1>
       <div class="subtitle">고등학생 맞춤 AI 진로·학습·세특 도우미</div>
+      <div class="dev-info">개발: Geek Byte (석근우)</div>
       <div class="status" id="status">서버 연결 확인 중...</div>
     </header>
 
@@ -74,8 +108,6 @@
       <button class="quick-btn" onclick="ask('디자인 분야 진로 상담 + 세특 부탁해요.')">🎨 디자인</button>
       <button class="quick-btn" onclick="ask('간호사가 되고 싶은데 어떻게 준비해야 해요?')">🏥 간호</button>
       <button class="quick-btn" onclick="ask('법학과 가고 싶어요. 세특 써주세요.')">⚖️ 법학</button>
-      <button class="quick-btn" onclick="ask('환경공학에 관심있어요. 세특 도와주세요.')">🌍 환경</button>
-      <button class="quick-btn" onclick="ask('건축학과 진로 상담해주세요.')">🏠 건축</button>
     </div>
 
     <div class="chat-box">
@@ -86,12 +118,13 @@
       <div class="messages" id="messages">
         <div class="msg ai">
           <div class="bubble">
-            안녕하세요! 👋 <strong>EduBuddy Pro</strong>입니다.<br><br>
-            🎯 <strong>진로 로드맵</strong>: 학과·진출분야·역량 안내<br>
-            📝 <strong>세특 작성</strong>: K-MOOC 강의 기반 완성형 세특<br>
-            📚 <strong>K-MOOC 강의</strong>: 강의 요약까지 확인 가능<br>
-            🏫 <strong>교과 연계</strong>: 수업과 연결하는 활동 아이디어<br>
-            🎓 <strong>학점은행제</strong>: 졸업 후 활용 과목 안내<br><br>
+            안녕하세요! 👋 <strong>EduBuddy</strong>입니다.<br><br>
+            🎯 <strong>진로 로드맵</strong>: 관심 분야 맞춤 진로·학과·역량 안내<br>
+            📝 <strong>세특 초안 작성</strong>: 실제 강좌명과 연계한 완성형 문장<br>
+            📚 <strong>K-MOOC 강의</strong>: 실제 강좌 검색 + 상세 페이지 링크<br>
+            🏫 <strong>교과 연계 탐구</strong>: 수업과 연결하는 구체적 활동 아이디어<br>
+            🎓 <strong>학점은행제</strong>: 졸업 후 활용 가능한 과목 안내<br>
+            💡 <strong>행동 계획</strong>: 이번 주/달/학기 단계별 실천 방안<br><br>
             무엇이 궁금하신가요? 😊
           </div>
         </div>
@@ -106,81 +139,55 @@
 
   <script>
     // ★★★ 본인 Apps Script 웹앱 URL 로 교체하세요 ★★★
-    var API_URL = "https://script.google.com/macros/s/AKfycbxGBdRtipP-e9SrXFAz1TboEmiZ80HHOGbZFAiUYI3F52RNNJSFHksgDG8buQm3oOc4/exec";
+    var API_URL = "https://script.google.com/macros/s/AKfycbzk5Pv7-qpBsU55r0c9hhjdtSn3l_YbKYYnrJvzoFkSDr9qXsKmRL7QqeT2WfaB5HUT/exec";
 
     var msgBox   = document.getElementById("messages");
     var msgInput = document.getElementById("msgInput");
     var sendBtn  = document.getElementById("sendBtn");
     var statusEl = document.getElementById("status");
 
-    // =========================================================
-    // JSONP 방식 API 요청
-    // =========================================================
     function apiRequest(params, timeoutMs) {
       timeoutMs = timeoutMs || 120000;
-
       return new Promise(function(resolve, reject) {
         var cbName = "__edubuddy_" + Date.now() + "_" + Math.random().toString(36).substr(2,6);
         params.callback = cbName;
-
         var qs = Object.keys(params).map(function(k) {
           return encodeURIComponent(k) + "=" + encodeURIComponent(params[k] == null ? "" : params[k]);
         }).join("&");
-
         var script = document.createElement("script");
         script.src = API_URL + "?" + qs;
         script.async = true;
-
         var done = false;
-        var timer = setTimeout(function() {
-          if (done) return;
-          done = true;
-          cleanup();
-          reject(new Error("요청 시간 초과"));
-        }, timeoutMs);
-
-        window[cbName] = function(data) {
-          if (done) return;
-          done = true;
-          cleanup();
-          resolve(data);
-        };
-
-        script.onerror = function() {
-          if (done) return;
-          done = true;
-          cleanup();
-          reject(new Error("서버 요청 실패"));
-        };
-
-        function cleanup() {
-          clearTimeout(timer);
-          try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-
+        var timer = setTimeout(function() { if (done) return; done = true; cleanup(); reject(new Error("요청 시간 초과")); }, timeoutMs);
+        window[cbName] = function(data) { if (done) return; done = true; cleanup(); resolve(data); };
+        script.onerror = function() { if (done) return; done = true; cleanup(); reject(new Error("서버 요청 실패")); };
+        function cleanup() { clearTimeout(timer); try { delete window[cbName]; } catch(e) { window[cbName] = undefined; } if (script.parentNode) script.parentNode.removeChild(script); }
         document.body.appendChild(script);
       });
     }
 
-    function ask(text) {
-      msgInput.value = text;
-      sendMsg();
-    }
+    function ask(text) { msgInput.value = text; sendMsg(); }
 
-    function esc(s) {
-      return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    function esc(s) { 
+      return String(s||"")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;"); 
     }
 
     function md2html(text) {
       if (!text) return "";
-      return String(text)
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      var html = String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
         .replace(/^### (.*)$/gm,"<h3>$1</h3>")
         .replace(/^## (.*)$/gm,"<h3>$1</h3>")
         .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
         .replace(/\n/g,"<br>");
+      return html;
     }
 
     function addMsg(html, type) {
@@ -202,43 +209,26 @@
       return id;
     }
 
-    function hideTyping(id) {
-      var el = document.getElementById(id);
-      if (el) el.remove();
-    }
+    function hideTyping(id) { var el = document.getElementById(id); if (el) el.remove(); }
 
-    // =========================================================
-    // 응답 포맷
-    // =========================================================
     function formatResponse(data) {
       var html = "";
-
-      // 메인 AI 응답
       html += md2html(data.response || "응답을 생성하지 못했습니다.");
-
-      // K-MOOC 카드
+      
       if (data.kmooc && data.kmooc.length > 0) {
-        html += '<div style="margin-top:16px"><h3>📚 K-MOOC 검색 결과</h3></div>';
+        html += '<div style="margin-top:14px"><h3>📚 K-MOOC 검색 결과</h3></div>';
         data.kmooc.forEach(function(c) {
           html += '<div class="course-card">';
           html += '<h4>' + esc(c.name) + '</h4>';
           html += '<div class="meta">👨‍🏫 ' + esc(c.professor||"-") + ' | 🏫 ' + esc(c.org||"-") + '</div>';
-          if (c.category) html += '<div class="meta">📂 ' + esc(c.category) + '</div>';
           if (c.period) html += '<div class="meta">📅 ' + esc(c.period) + '</div>';
-          if (c.summary) html += '<div class="summary">' + esc(c.summary.substring(0, 200)) + (c.summary.length > 200 ? '...' : '') + '</div>';
           html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강의 상세 보기</a>';
           html += '</div>';
         });
-      } else {
-        html += '<div class="info-box" style="margin-top:14px">';
-        html += '📚 K-MOOC에서 관련 강좌를 찾지 못했습니다. ';
-        html += '<a href="https://www.kmooc.kr" target="_blank" rel="noopener"><strong>K-MOOC에서 직접 검색하기 →</strong></a>';
-        html += '</div>';
       }
-
-      // 학점은행제 카드
+      
       if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:16px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
+        html += '<div style="margin-top:14px"><h3>🎓 학점은행제 과목 (졸업 후 활용)</h3></div>';
         html += '<div class="notice-box">⚠️ 학점은행제는 <strong>고등학교 졸업자 이상</strong>만 학점 인정이 가능합니다.<br>졸업 후 대학 편입·학위 취득·자격증 준비 시 참고하세요.</div>';
         data.credit.forEach(function(c) {
           html += '<div class="credit-card">';
@@ -247,37 +237,20 @@
           html += '<a class="credit-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 공시정보 검색</a>';
           html += '</div>';
         });
-      } else {
-        html += '<div class="info-box" style="margin-top:14px">';
-        html += '🎓 학점은행제 관련 과목을 찾지 못했습니다. ';
-        html += '<a href="https://www.cbinfo.or.kr" target="_blank" rel="noopener"><strong>학점은행제 공시정보에서 직접 검색 →</strong></a>';
-        html += '<br><small>※ 학점은행제는 고등학교 졸업 후 활용 가능합니다.</small>';
-        html += '</div>';
       }
-
       return html;
     }
 
-    // =========================================================
-    // 메시지 전송
-    // =========================================================
     function sendMsg() {
       var text = msgInput.value.trim();
       if (!text) return;
-
       addMsg(esc(text), "user");
       msgInput.value = "";
       sendBtn.disabled = true;
-
       var typingId = showTyping();
-
-      apiRequest({
-        type: "chat",
-        message: text.slice(0, 700)
-      }, 120000)
+      apiRequest({ type: "chat", message: text.slice(0, 700) }, 120000)
       .then(function(data) {
         hideTyping(typingId);
-
         if (data && data.status === "success" && data.data) {
           addMsg(formatResponse(data.data), "ai");
         } else {
@@ -289,18 +262,11 @@
         addMsg('<div class="error-box">❌ 통신 오류: ' + esc(err.message || String(err)) + '</div>', "ai");
         console.error("요청 오류:", err);
       })
-      .finally(function() {
-        sendBtn.disabled = false;
-        msgInput.focus();
-      });
+      .finally(function() { sendBtn.disabled = false; msgInput.focus(); });
     }
 
-    // =========================================================
-    // 시작 시 서버 연결 확인
-    // =========================================================
     window.onload = function() {
       statusEl.textContent = "서버 연결 확인 중...";
-
       apiRequest({ type: "handshake" }, 15000)
       .then(function(d) {
         if (d && d.status === "online") {
@@ -314,17 +280,7 @@
       .catch(function(err) {
         statusEl.textContent = "❌ 서버 연결 실패";
         statusEl.style.color = "#ffaaaa";
-
-        addMsg(
-          '<div class="error-box">' +
-          '⚠️ <strong>서버 연결 실패</strong><br><br>' +
-          '확인사항:<br>' +
-          '1. Apps Script에서 <strong>배포 → 배포 관리 → 연필 아이콘 → 새 버전 → 배포</strong><br>' +
-          '2. 액세스 권한이 <strong>"모든 사용자"</strong>인지<br>' +
-          '3. HTML의 API_URL이 <strong>/exec</strong>로 끝나는지<br>' +
-          '<br><small>' + esc(err.message) + '</small></div>',
-          "ai"
-        );
+        addMsg('<div class="error-box">⚠️ <strong>서버 연결 실패</strong><br>1. 배포 → 새 버전 생성<br>2. 액세스 권한: 모든 사용자<br>3. URL /exec 확인<br><small>' + esc(err.message) + '</small></div>', "ai");
       });
     };
   </script>
