@@ -1,271 +1,333 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBuddy - AI 진로·학습 도우미</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>EduBuddy</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 15px; }
-    .container { max-width: 900px; margin: 0 auto; }
-    header { text-align: center; color: white; margin-bottom: 15px; }
-    h1 { font-size: 2.2rem; margin-bottom: 5px; }
-    .subtitle { font-size: 1rem; opacity: 0.9; }
-    .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
-    .quick-btn { padding: 7px 14px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 18px; cursor: pointer; font-size: 13px; transition: all 0.3s; }
-    .quick-btn:hover { background: rgba(255,255,255,0.35); transform: translateY(-2px); }
-    .chat-box { background: white; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; height: 620px; }
-    .chat-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-    .clear-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; }
-    .messages { flex: 1; padding: 15px; overflow-y: auto; background: #f5f7fa; }
-    .msg { margin-bottom: 12px; display: flex; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    .msg.user { justify-content: flex-end; }
-    .msg.ai { justify-content: flex-start; }
-    .bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; line-height: 1.6; word-break: break-word; font-size: 14px; }
-    .msg.user .bubble { background: #667eea; color: white; border-bottom-right-radius: 4px; }
-    .msg.ai .bubble { background: white; color: #333; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-bottom-left-radius: 4px; }
-    .bubble h2, .bubble h3 { color: #667eea; margin: 10px 0 5px; font-size: 0.95rem; }
-    .bubble h2:first-child, .bubble h3:first-child { margin-top: 0; }
-    .bubble strong { color: #764ba2; }
-    .bubble a { color: #5568d3; text-decoration: none; }
-    .bubble a:hover { text-decoration: underline; }
-    .course-card { background: linear-gradient(135deg, #f0f4ff, #e8eeff); border-left: 4px solid #667eea; padding: 10px 12px; margin: 6px 0; border-radius: 6px; }
-    .course-card h4 { color: #667eea; margin-bottom: 3px; font-size: 0.9rem; }
-    .course-card p { font-size: 0.8rem; color: #555; margin: 2px 0; }
-    .course-link { display: inline-block; margin-top: 5px; background: #667eea; color: white !important; padding: 5px 10px; border-radius: 4px; text-decoration: none !important; font-size: 0.8rem; font-weight: bold; }
-    .course-link:hover { background: #5568d3; }
-    .credit-card { background: #f0fff4; border-left: 4px solid #34a853; padding: 8px 12px; margin: 5px 0; border-radius: 6px; }
-    .credit-card h4 { color: #34a853; font-size: 0.9rem; }
-    .credit-card p { font-size: 0.8rem; color: #555; }
-    .credit-link { display: inline-block; margin-top: 4px; background: #34a853; color: white !important; padding: 4px 8px; border-radius: 4px; text-decoration: none !important; font-size: 0.75rem; }
-    .no-data { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #856404; }
-    .error-box { background: #f8d7da; border-left: 4px solid #dc3545; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #721c24; }
-    .file-notice { background: #e7f3ff; border-left: 4px solid #2196F3; padding: 10px 12px; margin: 8px 0; border-radius: 6px; font-size: 0.85rem; color: #0c5460; }
-    .related-image { margin: 10px 0; border-radius: 8px; overflow: hidden; }
-    .related-image img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; }
-    .image-caption { text-align: center; font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic; }
-    .input-area { padding: 12px 15px; background: white; border-top: 1px solid #e0e0e0; display: flex; flex-direction: column; gap: 8px; }
-    .input-row { display: flex; gap: 8px; }
-    #msgInput { flex: 1; padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 22px; font-size: 14px; outline: none; }
-    #msgInput:focus { border-color: #667eea; }
-    #sendBtn { padding: 10px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 22px; font-size: 14px; font-weight: bold; cursor: pointer; }
-    #sendBtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(102,126,234,0.4); }
-    #sendBtn:disabled { background: #ccc; cursor: wait; }
-    .file-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .file-label { padding: 6px 12px; background: #f0f4ff; border: 1px dashed #667eea; border-radius: 15px; cursor: pointer; font-size: 12px; color: #667eea; }
-    .file-label:hover { background: #e8eeff; }
-    #fileInput { display: none; }
-    .file-name { font-size: 12px; color: #666; }
-    .img-toggle { padding: 6px 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 15px; cursor: pointer; font-size: 12px; color: #856404; }
-    .img-toggle.active { background: #ffc107; color: white; }
-    .typing { display: inline-flex; gap: 4px; padding: 12px 18px; background: white; border-radius: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-    .typing span { width: 7px; height: 7px; background: #667eea; border-radius: 50%; animation: bounce 1.4s infinite; }
-    .typing span:nth-child(2) { animation-delay: 0.2s; }
-    .typing span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
-    @media (max-width: 600px) { h1 { font-size: 1.6rem; } .chat-box { height: 520px; } .bubble { max-width: 92%; font-size: 13px; } }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:Segoe UI, Malgun Gothic, sans-serif;background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);min-height:100vh;padding:15px;}
+    .container{max-width:980px;margin:0 auto;}
+    header{text-align:center;color:#fff;margin-bottom:14px;}
+    h1{font-size:2.1rem;margin-bottom:4px;}
+    .subtitle{opacity:.9;font-size:1rem;}
+    .quick-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+    .quick-btn{padding:7px 14px;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:18px;cursor:pointer;font-size:13px;transition:.2s;}
+    .quick-btn:hover{background:rgba(255,255,255,0.35);transform:translateY(-2px);}
+    .chat-box{background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.2);overflow:hidden;display:flex;flex-direction:column;height:640px;}
+    .chat-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+    .clear-btn{background:rgba(255,255,255,0.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:12px;}
+    .messages{flex:1;padding:15px;overflow-y:auto;background:#f5f7fa;}
+    .msg{margin-bottom:12px;display:flex;animation:fadeIn .25s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+    .msg.user{justify-content:flex-end;}
+    .msg.ai{justify-content:flex-start;}
+    .bubble{max-width:85%;padding:12px 16px;border-radius:16px;line-height:1.6;word-break:break-word;font-size:14px;}
+    .msg.user .bubble{background:#667eea;color:#fff;border-bottom-right-radius:4px;}
+    .msg.ai .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(0,0,0,0.08);border-bottom-left-radius:4px;}
+    .bubble h2,.bubble h3{color:#667eea;margin:10px 0 6px;font-size:0.98rem;}
+    .bubble strong{color:#764ba2;}
+    .bubble a{color:#5568d3;text-decoration:none;}
+    .bubble a:hover{text-decoration:underline;}
+    .course-card{background:linear-gradient(135deg,#f0f4ff,#e8eeff);border-left:4px solid #667eea;padding:10px 12px;margin:7px 0;border-radius:8px;}
+    .course-card h4{color:#667eea;font-size:0.92rem;margin-bottom:3px;}
+    .course-card .meta{color:#555;font-size:0.82rem;margin:2px 0;}
+    .course-link{display:inline-block;margin-top:6px;background:#667eea;color:#fff !important;padding:6px 10px;border-radius:6px;text-decoration:none !important;font-size:0.85rem;font-weight:bold;}
+    .credit-card{background:#f0fff4;border-left:4px solid #34a853;padding:10px 12px;margin:7px 0;border-radius:8px;}
+    .credit-card h4{color:#34a853;font-size:0.92rem;margin-bottom:3px;}
+    .credit-card .meta{color:#555;font-size:0.82rem;margin:2px 0;}
+    .credit-link{display:inline-block;margin-top:6px;background:#34a853;color:#fff !important;padding:6px 10px;border-radius:6px;text-decoration:none !important;font-size:0.85rem;font-weight:bold;}
+    .no-data{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;margin:8px 0;border-radius:8px;color:#856404;}
+    .error-box{background:#f8d7da;border-left:4px solid #dc3545;padding:10px 12px;margin:8px 0;border-radius:8px;color:#721c24;}
+    .image-box{margin:10px 0;border-radius:12px;overflow:hidden;border:1px solid #eaeaea;background:#fff;}
+    .image-box img{width:100%;height:160px;object-fit:cover;display:block;}
+    .image-caption{padding:8px 12px;font-size:12px;color:#666;}
+    .input-area{padding:12px 14px;background:#fff;border-top:1px solid #e0e0e0;display:flex;flex-direction:column;gap:10px;}
+    .top-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+    .file-label{padding:7px 12px;border:1px dashed #667eea;border-radius:14px;color:#667eea;font-size:12px;cursor:pointer;background:#f0f4ff;}
+    #fileInput{display:none;}
+    #fileName{font-size:12px;color:#666;}
+    #imgToggle{padding:7px 12px;border:1px solid #ffc107;background:#fff3cd;border-radius:14px;cursor:pointer;font-size:12px;color:#856404;}
+    #imgToggle.active{background:#ffc107;color:#fff;border-color:#ffc107;}
+    .bottom-row{display:flex;gap:10px;align-items:center;}
+    #msgInput{flex:1;padding:10px 14px;border:2px solid #e0e0e0;border-radius:22px;font-size:14px;outline:none;}
+    #msgInput:focus{border-color:#667eea;}
+    #sendBtn{padding:10px 22px;border:none;border-radius:22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;}
+    #sendBtn:disabled{background:#ccc;cursor:wait;}
+    .typing{display:inline-flex;gap:4px;padding:12px 18px;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
+    .typing span{width:7px;height:7px;background:#667eea;border-radius:50%;animation:bounce 1.2s infinite;}
+    .typing span:nth-child(2){animation-delay:.2s;}
+    .typing span:nth-child(3){animation-delay:.4s;}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+    @media (max-width: 600px){.chat-box{height:560px;} .bubble{max-width:92%;font-size:13px;}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🎓 EduBuddy</h1>
-      <p class="subtitle">AI 기반 진로·학습 맞춤형 도우미</p>
-    </header>
-    <div class="quick-btns">
-      <button class="quick-btn" onclick="ask('AI 개발자가 되고 싶어요. 추천 강좌와 세특도 알려주세요.')">💻 AI 개발</button>
-      <button class="quick-btn" onclick="ask('의사가 되고 싶어요. 세특 작성 도와주세요.')">⚕️ 의학 진로</button>
-      <button class="quick-btn" onclick="ask('경제학 강의 추천해주세요.')">📊 경제학</button>
-      <button class="quick-btn" onclick="ask('디자이너 진로 상담해주세요.')">🎨 디자인</button>
-      <button class="quick-btn" onclick="ask('심리학 세특 어떻게 쓸까요?')">🧠 심리학</button>
-      <button class="quick-btn" onclick="ask('데이터 분석가가 되려면 뭘 배워야 하나요?')">📈 데이터</button>
+<div class="container">
+  <header>
+    <h1>🎓 EduBuddy</h1>
+    <div class="subtitle">AI 진로·학습 맞춤 도우미</div>
+  </header>
+
+  <div class="quick-btns">
+    <button class="quick-btn" onclick="ask('프로그래머가 되고 싶어요. 세특 추천해주세요.')">💻 AI/개발</button>
+    <button class="quick-btn" onclick="ask('의사가 되고 싶어요. 세특도 도와주세요.')">⚕️ 의학</button>
+    <button class="quick-btn" onclick="ask('경제학 관련 강의 추천해주세요.')">📊 경제학</button>
+    <button class="quick-btn" onclick="ask('디자인 진로 상담해주세요.')">🎨 디자인</button>
+    <button class="quick-btn" onclick="ask('심리학 세특 어떻게 써야 할까요?')">🧠 심리학</button>
+    <button class="quick-btn" onclick="ask('데이터 분석가가 되려면 뭘 배워야 해요?')">📈 데이터</button>
+  </div>
+
+  <div class="chat-box">
+    <div class="chat-header">
+      <span>🤖 EduBuddy AI</span>
+      <button class="clear-btn" onclick="clearChat()">대화 초기화</button>
     </div>
-    <div class="chat-box">
-      <div class="chat-header"><span>🤖 EduBuddy AI</span><button class="clear-btn" onclick="clearChat()">대화 초기화</button></div>
-      <div class="messages" id="messages">
-        <div class="msg ai"><div class="bubble">안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>📝 <strong>세특 작성</strong> 도움<br>📚 <strong>K-MOOC 강좌</strong> 추천<br>🎓 <strong>학점은행제</strong> 과목 안내<br>🎯 <strong>진로 상담</strong><br>📎 <strong>파일 분석</strong> (TXT, HWP)<br>🖼️ <strong>관련 이미지</strong> 생성<br><br>무엇이든 물어보세요! 😊</div></div>
+
+    <div class="messages" id="messages">
+      <div class="msg ai">
+        <div class="bubble">
+          안녕하세요! 👋
+          <br/>📝 세특 추천
+          <br/>📚 강의 추천 + 링크
+          <br/>🎓 학점은행제 추천
+          <br/>📎 TXT/HWP 첨부 가능
+          <br/>🖼️ 이미지 생성 프롬프트는 ON일 때 제공
+        </div>
       </div>
-      <div class="input-area">
-        <div class="file-controls">
-          <label class="file-label" for="fileInput">📎 파일 첨부</label>
-          <input type="file" id="fileInput" accept=".txt,.hwp,.text" onchange="handleFileSelect(event)">
-          <span class="file-name" id="fileName">선택된 파일 없음</span>
-          <button class="img-toggle" id="imgToggle" onclick="toggleImage()">🖼️ 이미지 생성: OFF</button>
-        </div>
-        <div class="input-row">
-          <input type="text" id="msgInput" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()">
-          <button id="sendBtn" onclick="sendMsg()">전송</button>
-        </div>
+    </div>
+
+    <div class="input-area">
+      <div class="top-row">
+        <label class="file-label" for="fileInput">📎 파일 첨부(TXT/HWP)</label>
+        <input type="file" id="fileInput" accept=".txt,.hwp,.hwp5,.doc,.docx" />
+        <div id="fileName">선택된 파일 없음</div>
+        <button id="imgToggle" onclick="toggleImg()">🖼️ 이미지 생성 프롬프트: OFF</button>
+      </div>
+
+      <div class="bottom-row">
+        <input id="msgInput" type="text" placeholder="궁금한 것을 입력하세요..." onkeydown="if(event.key==='Enter') sendMsg()" />
+        <button id="sendBtn" onclick="sendMsg()">전송</button>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    // ⚠️ 여기에 Apps Script 배포 URL 입력!
-    var API_URL = 'https://script.google.com/macros/s/AKfycbxBoQI4dp7-ezYL-luT480GjF_5AR-Fwl2Wy2uAXQQK62MNAunTB_SvAK33xEawZ8jH/exec';
-    var sid = localStorage.getItem('edu_sid') || ('s' + Date.now() + Math.random().toString(36).substr(2, 8));
-    localStorage.setItem('edu_sid', sid);
+<script>
+  // ✅ 여기만 너의 Apps Script 웹앱 URL로 바꿔!
+  var API_URL = "https://script.google.com/macros/s/AKfycbzIJXqlnJPwBDMSUdPT7OL6g8z-XWD2Hcyc8mPf8qk2-uqKXYLWAaqNZ_kwEmQDGLCw/exec";
 
-    var msgBox = document.getElementById('messages');
-    var msgInput = document.getElementById('msgInput');
-    var sendBtn = document.getElementById('sendBtn');
-    var fileInput = document.getElementById('fileInput');
-    var fileNameDisplay = document.getElementById('fileName');
-    var imgToggle = document.getElementById('imgToggle');
+  // 세션 (브라우저 로컬)
+  var sid = localStorage.getItem("edubuddy_sid");
+  if (!sid) {
+    sid = "s" + Date.now() + Math.random().toString(36).substr(2, 8);
+    localStorage.setItem("edubuddy_sid", sid);
+  }
 
-    var currentFileContent = '';
-    var currentFileName = '';
-    var needImage = false;
+  const msgBox = document.getElementById("messages");
+  const msgInput = document.getElementById("msgInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-    function ask(text) { msgInput.value = text; sendMsg(); }
+  const fileInput = document.getElementById("fileInput");
+  const fileNameEl = document.getElementById("fileName");
+  const imgToggleBtn = document.getElementById("imgToggle");
 
-    function toggleImage() {
-      needImage = !needImage;
-      imgToggle.textContent = '🖼️ 이미지 생성: ' + (needImage ? 'ON' : 'OFF');
-      imgToggle.classList.toggle('active', needImage);
-    }
+  let needImage = false;
+  let currentFileText = "";
+  let currentFileName = "";
 
-    function handleFileSelect(event) {
-      var file = event.target.files[0];
-      if (!file) return;
+  fileInput.addEventListener("change", async (ev) => {
+    const f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    currentFileName = f.name;
+    fileNameEl.textContent = "📄 " + f.name;
 
-      currentFileName = file.name;
-      fileNameDisplay.textContent = '📄 ' + file.name;
-
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var content = e.target.result;
-        // 텍스트만 추출 (최대 1000자)
-        currentFileContent = content.substring(0, 1000);
+    // readAsText (hwp는 브라우저에서 깨질 수 있지만, "에러 없이" 서버로 넘기기 위해서)
+    try {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // 너무 길면 서버/URL에서 터질 수 있으니 일부만
+        const txt = String(reader.result || "");
+        currentFileText = txt.slice(0, 1200);
       };
-      reader.readAsText(file);
+      reader.onerror = () => {
+        currentFileText = "";
+        fileNameEl.textContent = "📄 " + f.name + " (읽기 실패 - AI에 파일 내용 전송 안함)";
+      };
+      reader.readAsText(f);
+    } catch (err) {
+      currentFileText = "";
+      fileNameEl.textContent = "📄 " + f.name + " (읽기 오류 - AI에 파일 내용 전송 안함)";
+    }
+  });
+
+  function toggleImg() {
+    needImage = !needImage;
+    imgToggleBtn.textContent = "🖼️ 이미지 생성 프롬프트: " + (needImage ? "ON" : "OFF");
+    imgToggleBtn.classList.toggle("active", needImage);
+  }
+
+  function ask(text) {
+    msgInput.value = text;
+    sendMsg();
+  }
+
+  function showTyping() {
+    const id = "t" + Date.now();
+    const div = document.createElement("div");
+    div.className = "msg ai";
+    div.id = id;
+    div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    msgBox.appendChild(div);
+    msgBox.scrollTop = msgBox.scrollHeight;
+    return id;
+  }
+  function hideTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function esc(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function md2html(text) {
+    if (!text) return "";
+    // 아주 단순 변환 (필요 시 확장)
+    return text
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/## (.*)/g, "<h3>$1</h3>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br/>");
+  }
+
+  function addMsg(html, type) {
+    const div = document.createElement("div");
+    div.className = "msg " + type;
+    div.innerHTML = '<div class="bubble">' + html + '</div>';
+    msgBox.appendChild(div);
+    msgBox.scrollTop = msgBox.scrollHeight;
+  }
+
+  function formatResponse(data) {
+    let html = "";
+
+    // 이미지
+    if (data.imageUrl) {
+      html += '<div class="image-box"><img src="' + esc(data.imageUrl) + '" alt="관련 이미지" onerror="this.style.display=\'none\'"/><div class="image-caption">🖼️ ' + esc(data.analysis && data.analysis.field ? data.analysis.field : "") + ' 관련 이미지</div></div>';
     }
 
-    function sendMsg() {
-      var text = msgInput.value.trim();
-      if (!text && !currentFileContent) return;
+    // AI 본문
+    html += md2html(data.response || "응답 없음");
 
-      var displayText = text;
-      if (currentFileContent) {
-        displayText += '\n[첨부 파일: ' + currentFileName + ']';
-      }
-      addMsg(displayText, 'user');
-      msgInput.value = '';
-      sendBtn.disabled = true;
-      var typingId = showTyping();
-
-      // URL 길이 제한으로 파일 내용은 짧게
-      var fileParam = encodeURIComponent(currentFileContent.substring(0, 500));
-      var fnameParam = encodeURIComponent(currentFileName);
-      var url = API_URL + '?type=chat&msg=' + encodeURIComponent(text) + '&sid=' + encodeURIComponent(sid) + '&file=' + fileParam + '&fname=' + fnameParam + '&img=' + needImage;
-
-      fetch(url)
-        .then(function(res) {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(function(data) {
-          hideTyping(typingId);
-          if (data.status === 'success') {
-            addMsg(formatResponse(data), 'ai');
-          } else {
-            addMsg('<div class="error-box">❌ ' + esc(data.message || '알 수 없는 오류') + '</div>', 'ai');
-          }
-        })
-        .catch(function(err) {
-          hideTyping(typingId);
-          addMsg('<div class="error-box">❌ 연결 오류: ' + esc(err.message) + '</div>', 'ai');
-        })
-        .finally(function() {
-          sendBtn.disabled = false;
-          msgInput.focus();
-          // 파일 초기화
-          currentFileContent = '';
-          currentFileName = '';
-          fileInput.value = '';
-          fileNameDisplay.textContent = '선택된 파일 없음';
-        });
-    }
-
-    function formatResponse(data) {
-      var html = '';
-
-      // 관련 이미지
-      if (data.imageUrl) {
-        html += '<div class="related-image">';
-        html += '<img src="' + esc(data.imageUrl) + '" alt="관련 이미지" onerror="this.style.display=\'none\'">';
-        html += '<div class="image-caption">🖼️ ' + esc(data.analysis ? data.analysis.field : '') + ' 관련 이미지</div>';
+    // K-MOOC 카드
+    if (data.kmooc && data.kmooc.length > 0) {
+      html += '<div style="margin-top:14px;"><h3>📚 추천 K-MOOC 강좌</h3></div>';
+      data.kmooc.forEach(c => {
+        html += '<div class="course-card">';
+        html += '<h4>' + esc(c.name) + '</h4>';
+        html += '<div class="meta">👨‍🏫 ' + esc(c.professor) + ' | 🏫 ' + esc(c.org) + '</div>';
+        if (c.period) html += '<div class="meta">📅 ' + esc(c.period) + '</div>';
+        html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강좌 바로가기</a>';
         html += '</div>';
-      }
-
-      // AI 응답
-      if (data.response) html += md2html(data.response);
-
-      // K-MOOC 강좌
-      if (data.kmooc && data.kmooc.length > 0) {
-        html += '<div style="margin-top:12px"><h3>📚 K-MOOC 추천 강좌</h3></div>';
-        data.kmooc.forEach(function(c) {
-          html += '<div class="course-card"><h4>' + esc(c.name) + '</h4><p>👨‍🏫 ' + esc(c.professor) + ' &nbsp;|&nbsp; 🏫 ' + esc(c.org) + '</p>';
-          if (c.period && c.period !== ' ~ ') html += '<p>📅 ' + esc(c.period) + '</p>';
-          if (c.url) html += '<a class="course-link" href="' + esc(c.url) + '" target="_blank" rel="noopener">🔗 강좌 바로가기</a>';
-          html += '</div>';
-        });
-      } else {
-        html += '<div class="no-data">📚 관련 K-MOOC 강좌를 찾지 못했습니다. <a href="https://www.kmooc.kr" target="_blank">K-MOOC</a>에서 직접 검색해보세요.</div>';
-      }
-
-      // 학점은행제
-      if (data.credit && data.credit.length > 0) {
-        html += '<div style="margin-top:12px"><h3>🎓 학점은행제 과목</h3></div>';
-        data.credit.forEach(function(c) {
-          html += '<div class="credit-card"><h4>' + esc(c.subject) + '</h4><p>🏢 ' + esc(c.org) + '</p><a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a></div>';
-        });
-      }
-      return html;
+      });
+    } else {
+      html += '<div class="no-data" style="margin-top:12px;">📚 K-MOOC 추천 강좌를 찾지 못했습니다. (K-MOOC에서 직접 검색하세요)</div>';
+      // 검색 링크는 키워드가 있으면 보여줄 수 있는데, 여기서는 단순히 K-MOOC 메인
+      html += '<div class="no-data"><a href="https://www.kmooc.kr" target="_blank" rel="noopener">🔎 K-MOOC 바로가기</a></div>';
     }
 
-    function md2html(text) {
-      if (!text) return '';
-      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/## (.*)/g, '<h3>$1</h3>').replace(/# (.*)/g, '<h2>$1</h2>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\n/g, '<br>');
+    // 학점은행제 카드
+    if (data.credit && data.credit.length > 0) {
+      html += '<div style="margin-top:14px;"><h3>🎓 학점은행제 추천 과목</h3></div>';
+      data.credit.forEach(c => {
+        html += '<div class="credit-card">';
+        html += '<h4>' + esc(c.subject) + '</h4>';
+        html += '<div class="meta">🏢 ' + esc(c.org) + '</div>';
+        html += '<a class="credit-link" href="https://www.cb.or.kr/creditbank/stdSrvcStd/nStudyPortal.do" target="_blank" rel="noopener">🔗 학점은행제 검색</a>';
+        html += '</div>';
+      });
     }
 
-    function esc(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    return html;
+  }
 
-    function addMsg(html, type) {
-      var div = document.createElement('div');
-      div.className = 'msg ' + type;
-      div.innerHTML = '<div class="bubble">' + html + '</div>';
-      msgBox.appendChild(div);
-      msgBox.scrollTop = msgBox.scrollHeight;
-    }
+  function sendMsg() {
+    const text = msgInput.value.trim();
+    if (!text && !currentFileText) return;
 
-    function showTyping() {
-      var id = 't' + Date.now();
-      var div = document.createElement('div');
-      div.className = 'msg ai'; div.id = id;
-      div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
-      msgBox.appendChild(div); msgBox.scrollTop = msgBox.scrollHeight; return id;
-    }
+    // UI
+    addMsg(esc(text || "(파일만 첨부)"), "user");
+    msgInput.value = "";
+    sendBtn.disabled = true;
 
-    function hideTyping(id) { var el = document.getElementById(id); if (el) el.remove(); }
+    const typingId = showTyping();
 
-    function clearChat() {
-      if (!confirm('대화 내용을 삭제할까요?')) return;
-      fetch(API_URL + '?type=clear&sid=' + encodeURIComponent(sid))
-        .then(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다! 😊', 'ai'); })
-        .catch(function() { msgBox.innerHTML = ''; addMsg('대화가 초기화되었습니다.', 'ai'); });
-    }
+    // URL 길이 제한 때문에 파일은 currentFileText 일부만 전송
+    const fileParam = encodeURIComponent(currentFileText || "");
+    const fnameParam = encodeURIComponent(currentFileName || "");
+    const msgParam = encodeURIComponent(text || "");
 
-    window.onload = function() {
-      fetch(API_URL + '?type=ping')
-        .then(function(r) { return r.json(); })
-        .then(function(d) { console.log('✅ 연결 성공:', d); })
-        .catch(function(e) { console.error('❌ 연결 실패:', e); addMsg('<div class="error-box">⚠️ 서버 연결 실패. Apps Script 배포 URL을 확인하세요.</div>', 'ai'); });
-    };
-  </script>
+    // GET (원래 방식 유지)
+    const url =
+      API_URL +
+      '?type=chat' +
+      '&msg=' + msgParam +
+      '&sid=' + encodeURIComponent(sid) +
+      '&file=' + fileParam +
+      '&fname=' + fnameParam +
+      '&img=' + (needImage ? 'true' : 'false');
+
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(data => {
+        hideTyping(typingId);
+        if (data.status === "success") {
+          addMsg(formatResponse(data.data), "ai");
+        } else {
+          addMsg('<div class="error-box">❌ ' + esc(data.message || "알 수 없는 오류") + '</div>', "ai");
+        }
+      })
+      .catch(err => {
+        hideTyping(typingId);
+        addMsg('<div class="error-box">❌ 연결 오류: ' + esc(err.message || String(err)) + '</div>', "ai");
+      })
+      .finally(() => {
+        sendBtn.disabled = false;
+        // 파일 초기화(원하면 유지 가능)
+        currentFileText = "";
+        currentFileName = "";
+        fileInput.value = "";
+        fileNameEl.textContent = "선택된 파일 없음";
+        needImage = false;
+        imgToggleBtn.textContent = "🖼️ 이미지 생성 프롬프트: OFF";
+        imgToggleBtn.classList.remove("active");
+        msgInput.focus();
+      });
+  }
+
+  function clearChat() {
+    fetch(API_URL + '?type=clear&sid=' + encodeURIComponent(sid))
+      .then(() => {
+        msgBox.innerHTML = "";
+        addMsg('대화가 초기화되었습니다! 😊', "ai");
+      })
+      .catch(() => {
+        msgBox.innerHTML = "";
+        addMsg('대화 초기화 중 오류가 발생했습니다.', "ai");
+      });
+  }
+
+  // 연결 테스트
+  window.onload = function () {
+    fetch(API_URL + '?type=ping')
+      .then(r => r.json())
+      .then(d => console.log("✅ 연결 성공:", d))
+      .catch(e => console.error("❌ 연결 실패:", e));
+  };
+</script>
 </body>
 </html>
