@@ -8,7 +8,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 20px;
@@ -109,15 +109,10 @@
       border-bottom-left-radius: 4px;
     }
 
-    /* AI 응답 내 마크다운 스타일 */
     .bubble h2, .bubble h3 {
       color: #667eea;
       margin: 12px 0 6px;
       font-size: 1rem;
-    }
-
-    .bubble h2:first-child, .bubble h3:first-child {
-      margin-top: 0;
     }
 
     .bubble strong { color: #764ba2; }
@@ -129,14 +124,6 @@
 
     .bubble a:hover { text-decoration: underline; }
 
-    .bubble ul, .bubble ol {
-      margin: 8px 0;
-      padding-left: 20px;
-    }
-
-    .bubble li { margin-bottom: 4px; }
-
-    /* 강좌 카드 */
     .course-card {
       background: linear-gradient(135deg, #f0f4ff, #e8eeff);
       border-left: 4px solid #667eea;
@@ -166,9 +153,6 @@
       text-decoration: none;
     }
 
-    .course-card a:hover { text-decoration: underline; }
-
-    /* 학점은행제 카드 */
     .credit-card {
       background: #f0fff4;
       border-left: 4px solid #34a853;
@@ -187,7 +171,6 @@
       color: #555;
     }
 
-    /* 세특 박스 */
     .setech-box {
       background: #fffde7;
       border: 2px solid #ffc107;
@@ -198,7 +181,6 @@
 
     .setech-box h4 { color: #856404; }
 
-    /* 입력 영역 */
     .input-area {
       padding: 15px 20px;
       background: white;
@@ -241,7 +223,6 @@
       cursor: wait;
     }
 
-    /* 타이핑 인디케이터 */
     .typing {
       display: inline-flex;
       gap: 5px;
@@ -267,7 +248,6 @@
       30% { transform: translateY(-10px); }
     }
 
-    /* 반응형 */
     @media (max-width: 600px) {
       h1 { font-size: 1.8rem; }
       .chat-box { height: 550px; }
@@ -284,7 +264,7 @@
 
     <div class="quick-btns">
       <button class="quick-btn" onclick="ask('저는 AI와 프로그래밍에 관심이 있어요. 어떤 공부를 해야 할까요?')">💻 AI/프로그래밍</button>
-      <button class="quick-btn" onclick="ask('의사가 되고 싶은데 어떤 공부를 해야 하나요?')">⚕️ 의학 진로</button>
+      <button class="quick-btn" onclick="ask('의사가 되고 싶은데 어떤 공부를 해야 하나요?')">& 의학 진로</button>
       <button class="quick-btn" onclick="ask('경제학과 경영학을 배우고 싶어요')">📊 경제/경영</button>
       <button class="quick-btn" onclick="ask('디자이너가 되고 싶어요. 디자인 관련 강좌 추천해주세요')">🎨 디자인</button>
       <button class="quick-btn" onclick="ask('물리학과 공학에 관심이 있어요. 엔지니어가 되고 싶습니다')">⚙️ 공학</button>
@@ -292,9 +272,7 @@
     </div>
 
     <div class="chat-box">
-      <div class="chat-header">
-        🤖 EduBuddy AI 상담사
-      </div>
+      <div class="chat-header">🤖 EduBuddy AI 상담사</div>
 
       <div class="messages" id="messages">
         <div class="msg ai">
@@ -322,22 +300,18 @@
   </div>
 
   <script>
-    // ============================================
     // ⚠️ 여기에 Apps Script 배포 URL 입력!
-    // ============================================
-    var API_URL = 'https://script.google.com/macros/s/AKfycbzHaVSDraQbBiK4eYKvgYiidWMrqym5p0fmqLGKrdXjTW3XZ_Gfr_TOFqoPnQi5qcQs/exec';
+    var API_URL = 'https://script.google.com/macros/s/AKfycbz2NOHZmI_1GTqhdIzHjQ3cn_JUlY7yxTK4e1-Q72II3HEUlIX7lprVfeqboA9C72eY/exec';
 
     var msgBox = document.getElementById('messages');
     var msgInput = document.getElementById('msgInput');
     var sendBtn = document.getElementById('sendBtn');
 
-    // 빠른 버튼
     function ask(text) {
       msgInput.value = text;
       sendMsg();
     }
 
-    // 메시지 전송
     function sendMsg() {
       var text = msgInput.value.trim();
       if (!text) return;
@@ -348,10 +322,10 @@
 
       var typingId = showTyping();
 
-      // ✅ GET 방식으로 전송 (CORS 문제 없음!)
-      var url = API_URL + '?action=chat&message=' + encodeURIComponent(text);
+      // ✅ GET 요청 (type=chat 파라미터)
+      var url = API_URL + '?type=chat&message=' + encodeURIComponent(text);
 
-      fetch(url, { method: 'GET' })
+      fetch(url)
         .then(function(res) {
           if (!res.ok) throw new Error('HTTP ' + res.status);
           return res.json();
@@ -360,32 +334,31 @@
           hideTyping(typingId);
 
           if (data.status === 'success') {
-            var html = formatResponse(data);
+            var html = formatResponse(data.data);
             addMsg(html, 'ai');
           } else {
-            addMsg('❌ 오류: ' + data.message, 'ai');
+            addMsg('❌ 오류: ' + (data.message || data.error), 'ai');
           }
         })
         .catch(function(err) {
           hideTyping(typingId);
-          addMsg('❌ 오류가 발생했습니다: ' + err.message, 'ai');
+          addMsg('❌ 오류: ' + err.message, 'ai');
         })
         .finally(function() {
           sendBtn.disabled = false;
         });
     }
 
-    // 응답 포맷팅
     function formatResponse(data) {
       var html = '';
 
-      // AI 답변 (마크다운 변환)
-      html += markdownToHtml(data.aiResponse || '응답 없음');
+      // AI 답변
+      html += markdownToHtml(data.response || '응답 없음');
 
-      // K-MOOC 강좌 카드
-      if (data.kmoocCourses && data.kmoocCourses.length > 0) {
+      // K-MOOC 강좌
+      if (data.kmooc && data.kmooc.length > 0) {
         html += '<div style="margin-top:15px"><h3>📚 K-MOOC 추천 강좌</h3></div>';
-        data.kmoocCourses.forEach(function(c) {
+        data.kmooc.forEach(function(c) {
           html += '<div class="course-card">';
           html += '<h4>' + escapeHtml(c.name) + '</h4>';
           html += '<p>👨‍🏫 ' + escapeHtml(c.professor) + ' &nbsp;|&nbsp; 🏫 ' + escapeHtml(c.org) + '</p>';
@@ -395,14 +368,13 @@
         });
       }
 
-      // 학점은행제 카드
-      if (data.creditBank && data.creditBank.length > 0) {
+      // 학점은행제
+      if (data.credit && data.credit.length > 0) {
         html += '<div style="margin-top:15px"><h3>🎓 학점은행제 과목</h3></div>';
-        data.creditBank.forEach(function(c) {
+        data.credit.forEach(function(c) {
           html += '<div class="credit-card">';
           html += '<h4>' + escapeHtml(c.subject) + '</h4>';
           html += '<p>🏢 ' + escapeHtml(c.organization);
-          if (c.type) html += ' &nbsp;|&nbsp; 📋 ' + escapeHtml(c.type);
           html += '</p></div>';
         });
       }
@@ -410,7 +382,6 @@
       return html;
     }
 
-    // 간단한 마크다운 → HTML 변환
     function markdownToHtml(text) {
       if (!text) return '';
       return text
@@ -426,13 +397,11 @@
         .replace(/\n/g, '<br>');
     }
 
-    // HTML 이스케이프
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // 메시지 추가
     function addMsg(html, type) {
       var div = document.createElement('div');
       div.className = 'msg ' + type;
@@ -441,7 +410,6 @@
       msgBox.scrollTop = msgBox.scrollHeight;
     }
 
-    // 타이핑 표시
     function showTyping() {
       var id = 't' + Date.now();
       var div = document.createElement('div');
@@ -458,11 +426,9 @@
       if (el) el.remove();
     }
 
-    // ============================================
-    // 🔧 서버 연결 테스트 (페이지 로드 시 자동 실행)
-    // ============================================
+    // 서버 연결 테스트
     window.onload = function() {
-      fetch(API_URL + '?action=test', { method: 'GET' })
+      fetch(API_URL + '?type=handshake')
         .then(function(r) { return r.json(); })
         .then(function(d) {
           console.log('✅ 서버 연결 성공:', d);
