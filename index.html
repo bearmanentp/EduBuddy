@@ -3,222 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduBuddy - AI 진로 학습 도우미</title>
+  <title>EduBuddy - AI 진로·학습 도우미</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 20px;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    .container { max-width: 900px; margin: 0 auto; }
 
     header {
       text-align: center;
       color: white;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+    h1 { font-size: 2.5rem; margin-bottom: 5px; }
+    .subtitle { font-size: 1.1rem; opacity: 0.9; }
 
-    .subtitle {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    .chat-container {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      overflow: hidden;
-      height: 600px;
+    .quick-btns {
       display: flex;
-      flex-direction: column;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #f8f9fa;
-    }
-
-    .message {
-      margin-bottom: 15px;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .message.user {
-      text-align: right;
-    }
-
-    .message-bubble {
-      display: inline-block;
-      padding: 12px 18px;
-      border-radius: 18px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-
-    .user .message-bubble {
-      background: #667eea;
-      color: white;
-    }
-
-    .ai .message-bubble {
-      background: white;
-      color: #333;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-
-    .course-card {
-      background: #f0f4ff;
-      border-left: 4px solid #667eea;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-    }
-
-    .course-card h4 {
-      color: #667eea;
-      margin-bottom: 5px;
-    }
-
-    .course-card a {
-      color: #5568d3;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .course-card a:hover {
-      text-decoration: underline;
-    }
-
-    .setech-box {
-      background: #fff3cd;
-      border: 2px solid #ffc107;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 8px;
-    }
-
-    .setech-box h4 {
-      color: #856404;
-      margin-bottom: 8px;
-    }
-
-    .chat-input-area {
-      padding: 20px;
-      background: white;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      gap: 10px;
-    }
-
-    #userInput {
-      flex: 1;
-      padding: 12px 18px;
-      border: 2px solid #e0e0e0;
-      border-radius: 25px;
-      font-size: 15px;
-      outline: none;
-      transition: border 0.3s;
-    }
-
-    #userInput:focus {
-      border-color: #667eea;
-    }
-
-    #sendBtn {
-      padding: 12px 30px;
-      background: #667eea;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    #sendBtn:hover:not(:disabled) {
-      background: #5568d3;
-      transform: translateY(-2px);
-    }
-
-    #sendBtn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .typing-indicator {
-      display: inline-block;
-      padding: 12px 18px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .typing-indicator span {
-      height: 8px;
-      width: 8px;
-      background: #667eea;
-      border-radius: 50%;
-      display: inline-block;
-      margin: 0 2px;
-      animation: typing 1.4s infinite;
-    }
-
-    .typing-indicator span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-indicator span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes typing {
-      0%, 60%, 100% {
-        transform: translateY(0);
-      }
-      30% {
-        transform: translateY(-10px);
-      }
-    }
-
-    .example-questions {
-      display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 15px;
+      justify-content: center;
+      margin-bottom: 20px;
     }
 
-    .example-btn {
-      padding: 8px 15px;
+    .quick-btn {
+      padding: 8px 16px;
       background: rgba(255,255,255,0.2);
       color: white;
       border: 1px solid rgba(255,255,255,0.3);
@@ -228,9 +44,234 @@
       transition: all 0.3s;
     }
 
-    .example-btn:hover {
-      background: rgba(255,255,255,0.3);
+    .quick-btn:hover {
+      background: rgba(255,255,255,0.35);
       transform: translateY(-2px);
+    }
+
+    .chat-box {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 650px;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px 20px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f5f7fa;
+    }
+
+    .msg {
+      margin-bottom: 16px;
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.user { justify-content: flex-end; }
+    .msg.ai { justify-content: flex-start; }
+
+    .bubble {
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .msg.user .bubble {
+      background: #667eea;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.ai .bubble {
+      background: white;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-bottom-left-radius: 4px;
+    }
+
+    /* AI 응답 내 마크다운 스타일 */
+    .bubble h2, .bubble h3 {
+      color: #667eea;
+      margin: 12px 0 6px;
+      font-size: 1rem;
+    }
+
+    .bubble h2:first-child, .bubble h3:first-child {
+      margin-top: 0;
+    }
+
+    .bubble strong { color: #764ba2; }
+
+    .bubble a {
+      color: #5568d3;
+      text-decoration: none;
+    }
+
+    .bubble a:hover { text-decoration: underline; }
+
+    .bubble ul, .bubble ol {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .bubble li { margin-bottom: 4px; }
+
+    /* 강좌 카드 */
+    .course-card {
+      background: linear-gradient(135deg, #f0f4ff, #e8eeff);
+      border-left: 4px solid #667eea;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+
+    .course-card h4 {
+      color: #667eea;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+
+    .course-card p {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 2px 0;
+    }
+
+    .course-card a {
+      display: inline-block;
+      margin-top: 6px;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .course-card a:hover { text-decoration: underline; }
+
+    /* 학점은행제 카드 */
+    .credit-card {
+      background: #f0fff4;
+      border-left: 4px solid #34a853;
+      padding: 10px 15px;
+      margin: 6px 0;
+      border-radius: 8px;
+    }
+
+    .credit-card h4 {
+      color: #34a853;
+      font-size: 0.95rem;
+    }
+
+    .credit-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    /* 세특 박스 */
+    .setech-box {
+      background: #fffde7;
+      border: 2px solid #ffc107;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+
+    .setech-box h4 { color: #856404; }
+
+    /* 입력 영역 */
+    .input-area {
+      padding: 15px 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+    }
+
+    #msgInput {
+      flex: 1;
+      padding: 12px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    #msgInput:focus { border-color: #667eea; }
+
+    #sendBtn {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #sendBtn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+    }
+
+    #sendBtn:disabled {
+      background: #ccc;
+      cursor: wait;
+    }
+
+    /* 타이핑 인디케이터 */
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      padding: 14px 20px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .typing span {
+      width: 8px;
+      height: 8px;
+      background: #667eea;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+
+    /* 반응형 */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .chat-box { height: 550px; }
+      .bubble { max-width: 95%; }
     }
   </style>
 </head>
@@ -241,155 +282,196 @@
       <p class="subtitle">AI 기반 진로·학습 맞춤형 도우미</p>
     </header>
 
-    <div class="example-questions">
-      <button class="example-btn" onclick="sendExample('저는 AI와 프로그래밍에 관심있어요')">💻 AI/프로그래밍</button>
-      <button class="example-btn" onclick="sendExample('의사가 되고 싶은데 어떤 공부를 해야하나요?')">⚕️ 의학 진로</button>
-      <button class="example-btn" onclick="sendExample('경제학을 배우고 싶어요')">📊 경제학</button>
-      <button class="example-btn" onclick="sendExample('디자인 관련 강좌 추천해주세요')">🎨 디자인</button>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="ask('저는 AI와 프로그래밍에 관심이 있어요. 어떤 공부를 해야 할까요?')">💻 AI/프로그래밍</button>
+      <button class="quick-btn" onclick="ask('의사가 되고 싶은데 어떤 공부를 해야 하나요?')">⚕️ 의학 진로</button>
+      <button class="quick-btn" onclick="ask('경제학과 경영학을 배우고 싶어요')">📊 경제/경영</button>
+      <button class="quick-btn" onclick="ask('디자이너가 되고 싶어요. 디자인 관련 강좌 추천해주세요')">🎨 디자인</button>
+      <button class="quick-btn" onclick="ask('물리학과 공학에 관심이 있어요. 엔지니어가 되고 싶습니다')">⚙️ 공학</button>
+      <button class="quick-btn" onclick="ask('심리학을 배우고 싶고 상담사가 되고 싶어요')">🧠 심리학</button>
     </div>
 
-    <div class="chat-container">
-      <div class="chat-messages" id="chatMessages">
-        <div class="message ai">
-          <div class="message-bubble">
-            안녕하세요! 👋<br>
-            저는 당신의 학습과 진로를 돕는 <strong>EduBuddy</strong>입니다.<br><br>
-            배우고 싶은 내용, 관심 진로, 또는 지금까지 공부한 내용을 말씀해주세요!<br>
-            K-MOOC 강좌와 학점은행제 정보를 바탕으로 맞춤형 학습을 추천해드리고,<br>
-            <strong>세부능력 및 특기사항(세특)</strong>도 작성해드립니다. 📝
+    <div class="chat-box">
+      <div class="chat-header">
+        🤖 EduBuddy AI 상담사
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="msg ai">
+          <div class="bubble">
+            안녕하세요! 👋 저는 <strong>EduBuddy AI</strong>입니다.<br><br>
+            아래 버튼을 클릭하거나 직접 입력해주세요:<br><br>
+            📚 <strong>K-MOOC 강좌</strong> 추천<br>
+            🎓 <strong>학점은행제</strong> 과목 안내<br>
+            📝 <strong>세부능력 및 특기사항(세특)</strong> 작성 도움<br><br>
+            <em>예: "AI 엔지니어가 되고 싶어요" 또는 "생물학을 배웠는데 의대에 가고 싶어요"</em>
           </div>
         </div>
       </div>
 
-      <div class="chat-input-area">
-        <input 
-          type="text" 
-          id="userInput" 
-          placeholder="예: 저는 AI와 머신러닝을 배우고 싶어요..." 
-          onkeypress="handleKeyPress(event)"
+      <div class="input-area">
+        <input
+          type="text"
+          id="msgInput"
+          placeholder="배우고 싶은 내용이나 진로를 입력하세요..."
+          onkeydown="if(event.key==='Enter') sendMsg()"
         >
-        <button id="sendBtn" onclick="sendMessage()">전송</button>
+        <button id="sendBtn" onclick="sendMsg()">전송</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ⚠️ 여기에 본인의 Google Apps Script URL 입력
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzt2ixzzegH5zTI6l8a_8rrtCMnhzS6k8d5MEJu-SO6IWsUS-wAwsXR5e5iVgT8rB91/exec';
+    // ============================================
+    // ⚠️ 여기에 Apps Script 배포 URL 입력!
+    // ============================================
+    var API_URL = 'https://script.google.com/macros/s/AKfycbzHaVSDraQbBiK4eYKvgYiidWMrqym5p0fmqLGKrdXjTW3XZ_Gfr_TOFqoPnQi5qcQs/exec';
 
-    const chatMessages = document.getElementById('chatMessages');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+    var msgBox = document.getElementById('messages');
+    var msgInput = document.getElementById('msgInput');
+    var sendBtn = document.getElementById('sendBtn');
 
-    function handleKeyPress(event) {
-      if (event.key === 'Enter') {
-        sendMessage();
-      }
+    // 빠른 버튼
+    function ask(text) {
+      msgInput.value = text;
+      sendMsg();
     }
 
-    function sendExample(text) {
-      userInput.value = text;
-      sendMessage();
-    }
+    // 메시지 전송
+    function sendMsg() {
+      var text = msgInput.value.trim();
+      if (!text) return;
 
-    async function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message) return;
-
-      // 사용자 메시지 표시
-      addMessage(message, 'user');
-      userInput.value = '';
+      addMsg(text, 'user');
+      msgInput.value = '';
       sendBtn.disabled = true;
 
-      // 타이핑 인디케이터 표시
-      const typingId = addTypingIndicator();
+      var typingId = showTyping();
 
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: message })
+      // ✅ GET 방식으로 전송 (CORS 문제 없음!)
+      var url = API_URL + '?action=chat&message=' + encodeURIComponent(text);
+
+      fetch(url, { method: 'GET' })
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          hideTyping(typingId);
+
+          if (data.status === 'success') {
+            var html = formatResponse(data);
+            addMsg(html, 'ai');
+          } else {
+            addMsg('❌ 오류: ' + data.message, 'ai');
+          }
+        })
+        .catch(function(err) {
+          hideTyping(typingId);
+          addMsg('❌ 오류가 발생했습니다: ' + err.message, 'ai');
+        })
+        .finally(function() {
+          sendBtn.disabled = false;
         });
+    }
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    // 응답 포맷팅
+    function formatResponse(data) {
+      var html = '';
 
-        const data = await response.json();
-        removeTypingIndicator(typingId);
+      // AI 답변 (마크다운 변환)
+      html += markdownToHtml(data.aiResponse || '응답 없음');
 
-        if (data.status === 'success') {
-          // AI 답변 표시
-          let aiMessage = data.aiResponse;
-
-          // K-MOOC 강좌 추가
-          if (data.kmoocCourses && data.kmoocCourses.length > 0) {
-            aiMessage += '\n\n<div style="margin-top: 15px;"><strong>📚 추천 K-MOOC 강좌:</strong></div>';
-            data.kmoocCourses.forEach(course => {
-              aiMessage += `
-                <div class="course-card">
-                  <h4>${course.name}</h4>
-                  <p>👨‍🏫 ${course.professor} | 🏫 ${course.org_name}</p>
-                  <p>📅 ${course.study_period}</p>
-                  <a href="${course.url}" target="_blank">🔗 강좌 바로가기</a>
-                </div>
-              `;
-            });
-          }
-
-          // 학점은행제 정보 추가
-          if (data.creditBankInfo && data.creditBankInfo.length > 0) {
-            aiMessage += '\n\n<div style="margin-top: 15px;"><strong>🎓 학점은행제 과목:</strong></div>';
-            data.creditBankInfo.forEach(info => {
-              aiMessage += `
-                <div class="course-card">
-                  <h4>${info.subject}</h4>
-                  <p>🏢 ${info.organization}</p>
-                </div>
-              `;
-            });
-          }
-
-          addMessage(aiMessage, 'ai');
-        } else {
-          addMessage('❌ 오류: ' + data.message, 'ai');
-        }
-
-      } catch (error) {
-        removeTypingIndicator(typingId);
-        addMessage(`❌ 오류가 발생했습니다: ${error.message}`, 'ai');
-      } finally {
-        sendBtn.disabled = false;
+      // K-MOOC 강좌 카드
+      if (data.kmoocCourses && data.kmoocCourses.length > 0) {
+        html += '<div style="margin-top:15px"><h3>📚 K-MOOC 추천 강좌</h3></div>';
+        data.kmoocCourses.forEach(function(c) {
+          html += '<div class="course-card">';
+          html += '<h4>' + escapeHtml(c.name) + '</h4>';
+          html += '<p>👨‍🏫 ' + escapeHtml(c.professor) + ' &nbsp;|&nbsp; 🏫 ' + escapeHtml(c.org) + '</p>';
+          if (c.period) html += '<p>📅 ' + escapeHtml(c.period) + '</p>';
+          if (c.url) html += '<a href="' + c.url + '" target="_blank" rel="noopener">🔗 강좌 바로가기 →</a>';
+          html += '</div>';
+        });
       }
+
+      // 학점은행제 카드
+      if (data.creditBank && data.creditBank.length > 0) {
+        html += '<div style="margin-top:15px"><h3>🎓 학점은행제 과목</h3></div>';
+        data.creditBank.forEach(function(c) {
+          html += '<div class="credit-card">';
+          html += '<h4>' + escapeHtml(c.subject) + '</h4>';
+          html += '<p>🏢 ' + escapeHtml(c.organization);
+          if (c.type) html += ' &nbsp;|&nbsp; 📋 ' + escapeHtml(c.type);
+          html += '</p></div>';
+        });
+      }
+
+      return html;
     }
 
-    function addMessage(text, sender) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${sender}`;
-      messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    // 간단한 마크다운 → HTML 변환
+    function markdownToHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/## (.*)/g, '<h3>$1</h3>')
+        .replace(/# (.*)/g, '<h2>$1</h2>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/https?:\/\/[^\s<]+/g, function(url) {
+          return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
+        })
+        .replace(/\n/g, '<br>');
     }
 
-    function addTypingIndicator() {
-      const id = 'typing-' + Date.now();
-      const typingDiv = document.createElement('div');
-      typingDiv.id = id;
-      typingDiv.className = 'message ai';
-      typingDiv.innerHTML = `
-        <div class="typing-indicator">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      `;
-      chatMessages.appendChild(typingDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    // HTML 이스케이프
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // 메시지 추가
+    function addMsg(html, type) {
+      var div = document.createElement('div');
+      div.className = 'msg ' + type;
+      div.innerHTML = '<div class="bubble">' + html + '</div>';
+      msgBox.appendChild(div);
+      msgBox.scrollTop = msgBox.scrollHeight;
+    }
+
+    // 타이핑 표시
+    function showTyping() {
+      var id = 't' + Date.now();
+      var div = document.createElement('div');
+      div.className = 'msg ai';
+      div.id = id;
+      div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+      msgBox.appendChild(div);
+      msgBox.scrollTop = msgBox.scrollHeight;
       return id;
     }
 
-    function removeTypingIndicator(id) {
-      const element = document.getElementById(id);
-      if (element) element.remove();
+    function hideTyping(id) {
+      var el = document.getElementById(id);
+      if (el) el.remove();
     }
+
+    // ============================================
+    // 🔧 서버 연결 테스트 (페이지 로드 시 자동 실행)
+    // ============================================
+    window.onload = function() {
+      fetch(API_URL + '?action=test', { method: 'GET' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          console.log('✅ 서버 연결 성공:', d);
+        })
+        .catch(function(e) {
+          console.error('❌ 서버 연결 실패:', e);
+          addMsg('⚠️ 서버 연결에 실패했습니다. Apps Script 배포 상태를 확인해주세요.', 'ai');
+        });
+    };
   </script>
 </body>
 </html>
